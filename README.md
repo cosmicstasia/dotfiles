@@ -7,6 +7,7 @@
 ## 🌌 Overview
 
 These are the dotfiles powering **@cosmicstasia’s** development environment.
+Managed by chezmoi
 
 Built around:
 
@@ -46,7 +47,8 @@ Built for long coding sessions without eye strain.
 
 ## 🚀 Installation
 
-Clone into your home directory:
+First install chezmoi and then run:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/.dotfiles
+chezmoi init https://github.com/$GITHUB_USERNAME/dotfiles.git
+
