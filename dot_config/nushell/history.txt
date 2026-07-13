@@ -1,0 +1,139 @@
+curl -s https://repo.cider.sh/ARCH-GPG-KEY | sudo pacman-key --add -<\n>sudo pacman-key --lsign-key A0CD6B993438E22634450CDD2A236C3F42A61682
+sudo tee -a /etc/pacman.conf << 'EOF'<\n><\n># Cider Collective Repository<\n>[cidercollective]<\n>SigLevel = Required TrustedOnly<\n>Server = https://repo.cider.sh/arch<\n>EOF
+fish
+bash
+ls
+ls -a
+curl -fsSL https://herdr.dev/install.sh | sh
+herdr
+sudo pacman -S nu_plugin_polars
+nvim config.nu
+cat config.nu | wlcopy
+cat config.nu | wl-copy
+cat config.nu | wclip
+cat config.nu 
+nvim ~/.config/nushell/config.nu
+sudo pacman -S starship
+sudo pacman -S tv
+sudo pacman -S televison
+curl -fsSL https://alexpasmantier.github.io/television/install.sh | bash
+sudo pacman -S direnv
+starship init nushell
+starship init nu
+starship init nu > ~/.config/nushell/starship.nu
+starship init nu >> ~/.config/nushell/starship.nu
+starship init nu | ~/.config/nushell/starship.nu
+starship init nu | save  ~/.config/nushell/starship.nu
+cd ~/.config/nushell
+sudo pacman -S zoxide
+cd ~/.config/nushell
+z
+zoxide init nu 
+zoxide init nushell | save ~/.config/nushell/zoxide.nu
+nvim ~/.config/nushell/
+cd
+ls
+tv update-channels
+# Download and install nvm:<\n>curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.5/install.sh | bash<\n><\n># in lieu of restarting the shell<\n>\. "$HOME/.nvm/nvm.sh"<\n><\n># Download and install Node.js:<\n>nvm install 24<\n><\n># Verify the Node.js version:<\n>node -v # Should print "v24.18.0".<\n><\n># Verify npm version:<\n>npm -v # Should print "11.16.0".<\n>
+sudo pacman -S nodejs
+npm
+sudo pacman -S npm
+nvim
+herdr
+curl -fsSL https://herdr.dev/install.sh | sh
+herdr
+nvim ~/.config/nushell/env.nu
+nvim ~/.config/nushell/config.nu
+herdr
+herdr server stop
+chsh
+which nu
+chsh
+herdr
+fastfetch
+nvim ~/.config/herdr/config.toml
+herdr
+herdr server stop
+ls
+herdr
+http get -fsSL https://pi.dev/install.sh | sh
+http get  https://pi.dev/install.sh | sh
+pi
+nvim ~/.config/kitty/kitty.conf
+nu config
+config nu
+nvim ~/.config/nushell/config.nu
+config nu
+config
+config nu
+echo  $3nv.editor
+echo  $env.editor
+echo  $env.EDITOR
+$env.EDITOR = nvim
+$env.EDITOR = "nvim"
+config nu
+sudo pacman -S go
+curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install | sh -s -- --daemon
+nix
+exit
+nix
+nix-shell
+herdr server stop
+nix
+nvim
+config nu
+sudo pacman -S ipython
+ipython
+sudo pacman -S python3-polars
+sudo pacman -S python-polars
+ipython
+sudo pacman -S steam
+sudo pacman -S xwayland-satellite
+journalctl --user-unit=niri -b
+export $env.DISPLAY
+echo $env.DISPLAY
+$env.DISPLAY = ":0"
+config env
+with-env { DISPLAY: ":0" } { steam }
+overlay use ~/.config/nushell/env.nu 
+xwayland-satellite
+$env.DISPLAY = ":0"
+steam
+systemctl --user enable --now xwayland-satellite.service
+xwayland-satellite
+ls
+reboot
+niri
+config env
+exit
+exit
+logout
+exit
+reboot
+echo $env.DISPLAY
+systemctl get-default
+sudo systemctl set-default graphical.target
+systemctl status greetd
+niri
+reboot
+cat /etc/greetd/config.toml
+journalctl --user-unit=niri -b
+journalctl --user-unit=niri
+journalctl --user-unit=niri --no-pager 
+journalctl --user-unit=niri --no-pager -n 50
+niri validate
+config nu
+logout
+exit
+chsh
+niri
+sudo systemctl enable greetd --now
+exit
+reeboot
+reboot
+sudo pacman -S qgis
+nvim ~/.config/niri/config.kdl
+chezmoi
+sudo pacman -S chezmoi
+chezmoi init https://github.com/cosmicstasia/dotfiles.git
+chezmoi add ~/.config/nvim/
