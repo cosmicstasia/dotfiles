@@ -27,6 +27,8 @@ $env.PATH = ($env.PATH | prepend [
     "/opt/homebrew/bin"
     "/usr/local/bin"
     $"($env.HOME)/.cargo/bin"
+    $"($env.HOME)/.bun"
+    $"($env.HOME)/.bun/bin"
     $"($env.HOME)/.local/bin"
 ])
 
