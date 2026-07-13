@@ -1,0 +1,59 @@
+2026-07-09T11:41:21.570194Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=140911
+2026-07-09T11:41:21.570210Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-09T11:41:21.576999Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame
+2026-07-09T11:41:32.625868Z  INFO herdr::logging: herdr exiting event="app.shutdown" subsystem="client" outcome="completed" pid=140911
+2026-07-09T11:42:19.655414Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=141314
+2026-07-09T11:42:19.655435Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-09T11:42:19.907185Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame
+2026-07-09T11:42:33.306230Z  INFO herdr::logging: herdr exiting event="app.shutdown" subsystem="client" outcome="completed" pid=141314
+2026-07-09T11:43:39.265375Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=141855
+2026-07-09T11:43:39.265397Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-09T11:43:39.358767Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame
+2026-07-09T11:43:45.595585Z  INFO herdr::logging: herdr exiting event="app.shutdown" subsystem="client" outcome="completed" pid=141855
+2026-07-09T11:43:51.822084Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=141933
+2026-07-09T11:43:51.822097Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-09T11:43:51.906151Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame
+2026-07-09T11:44:03.616592Z  INFO herdr::logging: herdr exiting event="app.shutdown" subsystem="client" outcome="completed" pid=141933
+2026-07-09T12:03:08.914399Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=145391
+2026-07-09T12:03:08.914424Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-09T12:03:09.111390Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame
+2026-07-09T12:07:44.900853Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=146485
+2026-07-09T12:07:44.900876Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-09T12:07:45.100104Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame
+2026-07-09T12:11:06.168686Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=148991
+2026-07-09T12:11:06.168708Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-09T12:11:06.178770Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame
+2026-07-09T12:11:28.583410Z  INFO herdr::logging: herdr exiting event="app.shutdown" subsystem="client" outcome="completed" pid=148991
+2026-07-09T12:11:35.519640Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=149211
+2026-07-09T12:11:35.519653Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-09T12:11:35.602879Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame
+2026-07-09T12:19:37.445757Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=162481
+2026-07-09T12:19:37.445776Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-09T12:19:37.529420Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame
+2026-07-09T12:19:46.304077Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=162573
+2026-07-09T12:19:46.304092Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-09T12:19:46.455256Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=162640
+2026-07-09T12:19:46.455279Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-09T12:19:46.524070Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame
+2026-07-09T12:19:46.524133Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame
+2026-07-09T12:23:52.428705Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=165824
+2026-07-09T12:23:52.428722Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-09T12:23:52.588332Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame
+2026-07-09T12:24:26.987555Z  WARN herdr::raw_input: flushing lone escape after input timeout; if this follows an alt chord or focus switch it may reach the pane as plain esc bytes=[27]
+2026-07-09T12:24:26.987626Z  WARN herdr::raw_input: flushing lone escape after input timeout; if this follows an alt chord or focus switch it may reach the pane as plain esc bytes=[27]
+2026-07-09T12:25:28.569086Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=1095
+2026-07-09T12:25:28.569183Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-09T12:25:28.660644Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame
+2026-07-09T12:26:11.093235Z  WARN herdr::raw_input: flushing lone escape after input timeout; if this follows an alt chord or focus switch it may reach the pane as plain esc bytes=[27]
+2026-07-09T12:26:11.093289Z  WARN herdr::raw_input: flushing lone escape after input timeout; if this follows an alt chord or focus switch it may reach the pane as plain esc bytes=[27]
+2026-07-09T12:26:12.641882Z  WARN herdr::raw_input: flushing lone escape after input timeout; if this follows an alt chord or focus switch it may reach the pane as plain esc bytes=[27]
+2026-07-09T12:26:12.641960Z  WARN herdr::raw_input: flushing lone escape after input timeout; if this follows an alt chord or focus switch it may reach the pane as plain esc bytes=[27]
+2026-07-09T12:27:13.733489Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=1084
+2026-07-09T12:27:13.733590Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-09T12:27:13.822807Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame
+2026-07-09T12:32:14.385799Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=1081
+2026-07-09T12:32:14.385993Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-09T12:32:14.475372Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame
+2026-07-13T13:15:54.429044Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=69315
+2026-07-13T13:15:54.429164Z  INFO herdr::client: connecting to server path=/home/anastasiac/.config/herdr/herdr-client.sock
+2026-07-13T13:15:54.513527Z  INFO herdr::client: handshake succeeded version=16 encoding=SemanticFrame

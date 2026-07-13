@@ -137,3 +137,18 @@ chezmoi
 sudo pacman -S chezmoi
 chezmoi init https://github.com/cosmicstasia/dotfiles.git
 chezmoi add ~/.config/nvim/
+chezmoi -v apply
+vchezmoi cd<\n>git add .<\n>git commit -m "Initial commit"
+pacseek
+paru -S pacseek-bin
+pacseek
+paru -S 1password
+ssh-add ~/.ssh/id_ed25519_github
+ssh-add ~/.ssh/id_ed25519_github_pc
+sudo pacman -S --needed wl-clipboard
+open ~/.ssh/id_ed25519_github.pub | wl-copy
+open ~/.ssh/id_ed25519_github_pc.pub | wl-copy
+ssh -T git@github.com
+ssh-add ~/.ssh/id_ed25519_github_pc
+open ~/.ssh/id_ed25519_github.pub | wl-copy
+ssh -T git@github.com

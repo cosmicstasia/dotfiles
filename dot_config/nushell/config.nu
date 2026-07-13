@@ -5,6 +5,8 @@ $env.config.show_banner = false
 overlay use starship.nu 
 overlay use zoxide.nu 
 
+# ------- SSH Agent ---------------------------------------------------------- 
+$env.SSH_AUTH_SOCK = $"($env.XDG_RUNTIME_DIR)/ssh-agent.socket"
 # --- Aliases ---------------------------------------------------------------
 alias python = python3
 alias oc = opencode

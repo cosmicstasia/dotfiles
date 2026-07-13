@@ -1,0 +1,8 @@
+onboarding = false
+
+
+[terminal]
+default_shell = "nu"
+
+[experimental]
+kitty_graphics = true
