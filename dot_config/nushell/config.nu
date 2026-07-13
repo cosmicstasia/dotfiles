@@ -104,3 +104,4 @@ $env.config.hooks.env_change.PWD = (
     | append {|before, after| direnv export json | from json | default {} | load-env }
 )
 
+use std/formats "from ndjson"
