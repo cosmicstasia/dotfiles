@@ -3,5 +3,10 @@ use = "yazi-rs/plugins:mount"
 rev = "bb758e2"
 hash = "e3260d0b1feded8c8e3ae3afa1169e30"
 
+[[plugin.deps]]
+use = "wylie102/duckdb"
+rev = "3f8c863"
+hash = "87b9233a74325e95011670ed20bbd0d4"
+
 [flavor]
 deps = []

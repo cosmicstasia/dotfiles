@@ -1,3 +1,23 @@
 [[mgr.prepend_keymap]]
 on = "M"
 run = "plugin mount"
+
+[[mgr.prepend_keymap]]
+on = "H"
+run = "plugin duckdb -- --left"
+desc = "Scroll one column left"
+
+[[mgr.prepend_keymap]]
+on = "L"
+run = "plugin duckdb -- --right"
+desc = "Scroll one column right"
+
+[[mgr.prepend_keymap]]
+on = ["g", "o"]
+run = "plugin duckdb -- --open"
+desc = "Open with DuckDB"
+
+[[mgr.prepend_keymap]]
+on = ["g", "u"]
+run = "plugin duckdb -- --ui"
+desc = "Open with DuckDB UI 'dukdb ui'"

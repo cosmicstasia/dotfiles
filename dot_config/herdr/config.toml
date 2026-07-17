@@ -1,8 +1,19 @@
 onboarding = false
 
-
 [terminal]
 default_shell = "nu"
 
 [experimental]
 kitty_graphics = true
+
+[[keys.command]]  # open in a split pane
+key = "prefix+f"
+type = "plugin_action"
+command = "ray.file-explorer.open"
+description = "open file explorer"
+
+[[keys.command]]  # open in a new tab
+key = "prefix+F"
+type = "plugin_action"
+command = "ray.file-explorer.open-tab"
+description = "open file explorer in a new tab"
