@@ -6,7 +6,9 @@ overlay use starship.nu
 overlay use zoxide.nu 
 
 # ------- SSH Agent ---------------------------------------------------------- 
-$env.SSH_AUTH_SOCK = $"($env.XDG_RUNTIME_DIR)/ssh-agent.socket"
+if "XDG_RUNTIME_DIR" in $env {
+    $env.SSH_AUTH_SOCK = $"($env.XDG_RUNTIME_DIR)/ssh-agent.socket"
+}
 # --- Aliases ---------------------------------------------------------------
 alias python = python3
 alias oc = opencode
@@ -42,27 +44,6 @@ let carapace_completer = {|spans: list<string>|
     CARAPACE_LENIENT=1 carapace $spans.0 nushell ...$spans | from json
 }
 
-let fish_completer = {|spans: list<string>|
-    fish --command $"
-      complete '--do-complete=($spans | str replace --all "'" "\\'" | str join ' ')'
-    "
-    | from tsv --flexible --noheaders --no-infer
-    | rename value description
-    | update value {|row|
-        let value = $row.value
-        let need_quote = [' ' '[' ']' '(' ')' '\t' "'" '"' '`'] | any {|x| $x in $value}
-        if ($need_quote and ($value | path exists)) {
-          let expanded_path = if ($value starts-with "~") {
-            $value | path expand --no-symlink
-          } else {
-            $value
-          }
-          $'"($expanded_path | str replace --all "\"" "\\\"")"'
-        } else {
-          $value
-        }
-      }
-}
 
 let external_completer = {|spans: list<string>|
     let expanded_alias = (
@@ -78,11 +59,11 @@ let external_completer = {|spans: list<string>|
       $spans
     }
     match $resolved_spans.0 {
-      git => (do $fish_completer $resolved_spans)
-      ssh => (do $fish_completer $resolved_spans)
-      scp => (do $fish_completer $resolved_spans)
-      sftp => (do $fish_completer $resolved_spans)
-      _ => (do $fish_completer $resolved_spans)
+      git => (do $carapace_completer $resolved_spans)
+      ssh => (do $carapace_completer $resolved_spans)
+      scp => (do $carapace_completer $resolved_spans)
+      sftp => (do $carapace_completer $resolved_spans)
+      _ => (do $carapace_completer $resolved_spans)
     }
 }
 
@@ -98,6 +79,7 @@ $env.config = (
       }
 )
 $env.EDITOR = "nvim"
+$env.TALOSCONFIG = ($env.HOME | path join "Projects/BM/talos_setup/credentials/talosconfig")
 # --- direnv ------------------------------------------------------------
 # Home Manager's `programs.direnv.enable` wires this hook automatically;
 # in a plain config you add it yourself:

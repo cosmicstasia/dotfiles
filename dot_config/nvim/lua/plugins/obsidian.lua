@@ -8,7 +8,7 @@ return {
     workspaces = {
       {
         name = "personal",
-        path = "~/Obsidian/Anastasia_Vault/",
+        path = "/Users/anastasia/Library/Mobile Documents/iCloud~md~obsidian/Documents/Anastasia's Vault",
       },
     },
   },
