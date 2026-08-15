@@ -22,6 +22,7 @@ alias cd = z
 alias weather = curl wttr.in
 alias py = python3
 alias ".." = cd ..
+alias docker = podman 
 
 
 # --- path join ---------------------------------------------------------------
