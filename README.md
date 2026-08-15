@@ -1,54 +1,26 @@
-# ✨ cosmicstasia’s dotfiles
+# Dotfiles
 
-> Personal configuration for a fast, modern, terminal-first development workflow.
+Cross-platform configuration for macOS and Arch Linux, managed by chezmoi.
 
----
+## What Is Shared
 
-## 🌌 Overview
+- Nushell, Starship, Zoxide, Atuin, and direnv
+- Git and SSH signing settings
+- Neovim, tmux, Kitty, Yazi, btop, and Herdr configuration
+- Command-line packages through Homebrew on macOS and Linuxbrew on Arch
 
-These are the dotfiles powering **@cosmicstasia’s** development environment.
-Managed by chezmoi
+Chezmoi templates keep package casks, SSH agent paths, Obsidian vaults, and other host-specific values local to each machine.
 
-Built around:
+## Bootstrap
 
-- 🧠 Neovim (LazyVim)
-- 🐚 Modern shell setup
-- ⚡ Keyboard-driven workflow
-- 🎨 Carefully tuned theme + UI consistency
+Install chezmoi, initialize this repository, and apply it:
 
-The goal:
+```sh
+chezmoi init https://github.com/cosmicstasia/dotfiles.git
+chezmoi diff
+chezmoi apply
+```
 
-> Clean. Fast. Intentional. No fluff.
+On Arch, the bootstrap script installs Linuxbrew prerequisites and Linux-integrated packages with pacman. On macOS, GUI applications are installed as Homebrew casks. Both platforms install the shared CLI inventory from the rendered `~/Brewfile`.
 
----
-
-## 🧩 Stack
-
-| Tool        | Purpose                     |
-|------------|----------------------------|
-| Neovim     | Primary editor              |
-| LazyVim    | Plugin + LSP management     |
-| nvim-cmp   | Autocompletion              |
-| Kanagawa   | Colorscheme                 |
-| Git        | Version control             |
-| SSH        | Remote workflow             |
-
----
-
-## 🎨 Theme
-
-Colorscheme: **Kanagawa**  
-Variant: `wave`
-
-Soft contrast. Calm blues. Muted tones.  
-Built for long coding sessions without eye strain.
-
----
-
-## 🚀 Installation
-
-First install chezmoi and then run:
-
-```bash
-chezmoi init https://github.com/$GITHUB_USERNAME/dotfiles.git
-
+The first initialization prompts for machine-specific paths. Re-run `chezmoi init` to update those values later.

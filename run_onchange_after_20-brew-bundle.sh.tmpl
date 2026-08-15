@@ -1,0 +1,14 @@
+#!/bin/sh
+set -eu
+
+# Re-run when the package manifest changes: {{ include "Brewfile.tmpl" | sha256sum }}
+if [ -x /opt/homebrew/bin/brew ]; then
+  brew=/opt/homebrew/bin/brew
+elif [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  brew=/home/linuxbrew/.linuxbrew/bin/brew
+else
+  echo "Homebrew is not installed" >&2
+  exit 1
+fi
+
+"$brew" bundle --file="$HOME/Brewfile"

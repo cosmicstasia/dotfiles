@@ -1,0 +1,23 @@
+#!/bin/sh
+set -eu
+
+# Re-run when the shell config changes: {{ include "dot_config/nushell/config.nu.tmpl" | sha256sum }}
+config_dir="$HOME/.config/nushell"
+autoload_dir="$config_dir/vendor/autoload"
+mkdir -p "$config_dir" "$autoload_dir"
+
+if [ -d /opt/homebrew/bin ]; then
+  PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+elif [ -d /home/linuxbrew/.linuxbrew/bin ]; then
+  PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
+fi
+export PATH
+
+command -v starship >/dev/null 2>&1 && starship init nu > "$config_dir/starship.nu"
+command -v zoxide >/dev/null 2>&1 && zoxide init nushell > "$config_dir/zoxide.nu"
+command -v atuin >/dev/null 2>&1 && atuin init nu > "$config_dir/atuin.nu"
+command -v tv >/dev/null 2>&1 && tv init nu > "$autoload_dir/tv.nu"
+
+if [ -x "$HOME/.tmux/plugins/tpm/bin/install_plugins" ]; then
+  "$HOME/.tmux/plugins/tpm/bin/install_plugins" || true
+fi

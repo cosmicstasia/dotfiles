@@ -1,7 +1,8 @@
 return {
   "pablopunk/pi.nvim",
+  enabled = vim.fn.executable("pi") == 1,
   opts = {
-    binary = "/opt/homebrew/bin/pi",
+    binary = "pi",
     provider = "openai-codex",
     model = "gpt-5.5",
     thinking = "medium",

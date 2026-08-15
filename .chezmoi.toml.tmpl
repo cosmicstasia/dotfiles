@@ -1,0 +1,18 @@
+{{- $gitName := promptStringOnce . "gitName" "Git name" -}}
+{{- $gitEmail := promptStringOnce . "gitEmail" "Git email" -}}
+{{- $gitSigningKey := promptStringOnce . "gitSigningKey" "Git SSH signing public key (optional)" -}}
+{{- $gitSigningProgram := promptStringOnce . "gitSigningProgram" "SSH signing program path (optional)" -}}
+{{- $sshAuthSock := promptStringOnce . "sshAuthSock" "SSH agent socket path (optional)" -}}
+{{- $obsidianVault := promptStringOnce . "obsidianVault" "Obsidian vault path (optional)" -}}
+{{- $talosConfig := promptStringOnce . "talosConfig" "Talos config path (optional)" -}}
+{{- $herdrWorkspace := promptStringOnce . "herdrWorkspace" "Herdr workspace path" -}}
+
+[data]
+gitName = {{ $gitName | quote }}
+gitEmail = {{ $gitEmail | quote }}
+gitSigningKey = {{ $gitSigningKey | quote }}
+gitSigningProgram = {{ $gitSigningProgram | quote }}
+sshAuthSock = {{ $sshAuthSock | quote }}
+obsidianVault = {{ $obsidianVault | quote }}
+talosConfig = {{ $talosConfig | quote }}
+herdrWorkspace = {{ $herdrWorkspace | quote }}

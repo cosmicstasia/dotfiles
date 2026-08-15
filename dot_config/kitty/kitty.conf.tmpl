@@ -1,0 +1,26 @@
+include themes/noctalia.conf
+
+editor nvim
+shell nu
+font_size 12.0
+draw_minimal_borders yes
+inactive_text_alpha 0.7
+confirm_os_window_close 0
+background_opacity 0.90
+
+{{ if eq .chezmoi.os "darwin" -}}
+macos_titlebar_color background
+map cmd+c copy_to_clipboard
+map cmd+v paste_from_clipboard
+map cmd+w close_window
+map cmd+shift+n new_os_window
+map cmd+d launch --location=hsplit --cwd=current
+map cmd+shift+d launch --location=vsplit --cwd=current
+{{ else -}}
+map ctrl+shift+c copy_to_clipboard
+map ctrl+shift+v paste_from_clipboard
+map ctrl+shift+w close_window
+map ctrl+shift+enter new_os_window
+map ctrl+shift+d launch --location=hsplit --cwd=current
+map ctrl+shift+alt+d launch --location=vsplit --cwd=current
+{{ end -}}

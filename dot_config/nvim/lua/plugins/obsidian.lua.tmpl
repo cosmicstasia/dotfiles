@@ -1,0 +1,18 @@
+return {
+  "obsidian-nvim/obsidian.nvim",
+{{- if not .obsidianVault }}
+  enabled = false,
+{{- end }}
+  version = "*", -- use latest release, remove to use latest commit
+  ---@module 'obsidian'
+  ---@type obsidian.config
+  opts = {
+    legacy_commands = false, -- this will be removed in 4.0.0
+    workspaces = {
+      {
+        name = "personal",
+        path = {{ .obsidianVault | quote }},
+      },
+    },
+  },
+}

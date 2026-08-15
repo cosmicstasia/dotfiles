@@ -1,0 +1,87 @@
+$env.config.show_banner = false
+
+overlay use starship.nu
+overlay use zoxide.nu
+source atuin.nu
+
+{{ if .sshAuthSock -}}
+$env.SSH_AUTH_SOCK = {{ .sshAuthSock | quote }}
+{{ else -}}
+if "XDG_RUNTIME_DIR" in $env {
+    $env.SSH_AUTH_SOCK = ($env.XDG_RUNTIME_DIR | path join "ssh-agent.socket")
+}
+{{ end -}}
+
+alias python = python3
+alias oc = opencode
+alias v = nvim
+alias vim = nvim
+alias vi = nvim
+alias k = kubectl
+alias lg = lazygit
+alias cat = bat
+alias cd = z
+alias weather = curl wttr.in
+alias py = python3
+alias ".." = cd ..
+alias docker = podman
+
+let brew_prefix = if $nu.os-info.name == "macos" {
+    "/opt/homebrew"
+} else {
+    "/home/linuxbrew/.linuxbrew"
+}
+
+let extra_paths = [
+    ($brew_prefix | path join "bin")
+    ($brew_prefix | path join "sbin")
+    $"($env.HOME)/.cargo/bin"
+    $"($env.HOME)/.bun/bin"
+    $"($env.HOME)/.local/bin"
+]
+$env.PATH = ($env.PATH | prepend ($extra_paths | where {|path| $path | path exists }) | uniq)
+
+if (which carapace | is-not-empty) {
+    let carapace_completer = {|spans: list<string>|
+        CARAPACE_LENIENT=1 carapace $spans.0 nushell ...$spans | from json
+    }
+
+    let external_completer = {|spans: list<string>|
+        let expanded_alias = (
+          scope aliases
+          | where name == $spans.0
+          | get -o 0.expansion
+        )
+        let resolved_spans = if $expanded_alias != null {
+          $spans | skip 1 | prepend ($expanded_alias | split row " " | get 0)
+        } else {
+          $spans
+        }
+        do $carapace_completer $resolved_spans
+    }
+
+    $env.config = ($env.config | merge {
+        completions: {
+            external: {
+                enable: true
+                completer: $external_completer
+            }
+        }
+    })
+}
+
+$env.EDITOR = "nvim"
+$env.KUBECONFIG = ($env.HOME | path join ".kube/config")
+$env.BUN_INSTALL = ($env.HOME | path join ".bun")
+{{ if .talosConfig -}}
+$env.TALOSCONFIG = {{ .talosConfig | quote }}
+{{ end -}}
+
+if (which direnv | is-not-empty) {
+    $env.config.hooks.env_change.PWD = (
+        $env.config.hooks.env_change.PWD? | default []
+        | append {|before, after| direnv export json | from json | default {} | load-env }
+    )
+}
+
+use std/formats "from ndjson"
