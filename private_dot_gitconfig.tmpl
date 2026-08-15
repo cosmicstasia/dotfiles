@@ -1,8 +1,14 @@
+{{- $gitName := get . "gitName" | default "" -}}
+{{- $gitEmail := get . "gitEmail" | default "" -}}
+{{- $gitSigningKey := get . "gitSigningKey" | default "" -}}
+{{- $gitSigningProgram := get . "gitSigningProgram" | default "" -}}
+{{- if or $gitName $gitEmail }}
 [user]
-	name = {{ .gitName }}
-	email = {{ .gitEmail }}
-{{- if .gitSigningKey }}
-	signingkey = {{ .gitSigningKey }}
+	name = {{ $gitName }}
+	email = {{ $gitEmail }}
+{{- if $gitSigningKey }}
+	signingkey = {{ $gitSigningKey }}
+{{- end }}
 {{- end }}
 [init]
 	defaultBranch = main
@@ -11,11 +17,11 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-{{- if and .gitSigningKey .gitSigningProgram }}
+{{- if and $gitSigningKey $gitSigningProgram }}
 [gpg]
 	format = ssh
 [gpg "ssh"]
-	program = {{ .gitSigningProgram }}
+	program = {{ $gitSigningProgram }}
 [commit]
 	gpgsign = true
 {{- end }}

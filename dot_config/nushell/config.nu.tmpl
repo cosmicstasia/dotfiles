@@ -1,11 +1,13 @@
+{{- $sshAuthSock := get . "sshAuthSock" | default "" -}}
+{{- $talosConfig := get . "talosConfig" | default "" -}}
 $env.config.show_banner = false
 
 overlay use starship.nu
 overlay use zoxide.nu
 source atuin.nu
 
-{{ if .sshAuthSock -}}
-$env.SSH_AUTH_SOCK = {{ .sshAuthSock | quote }}
+{{ if $sshAuthSock -}}
+$env.SSH_AUTH_SOCK = {{ $sshAuthSock | quote }}
 {{ else -}}
 if "XDG_RUNTIME_DIR" in $env {
     $env.SSH_AUTH_SOCK = ($env.XDG_RUNTIME_DIR | path join "ssh-agent.socket")
@@ -73,8 +75,8 @@ if (which carapace | is-not-empty) {
 $env.EDITOR = "nvim"
 $env.KUBECONFIG = ($env.HOME | path join ".kube/config")
 $env.BUN_INSTALL = ($env.HOME | path join ".bun")
-{{ if .talosConfig -}}
-$env.TALOSCONFIG = {{ .talosConfig | quote }}
+{{ if $talosConfig -}}
+$env.TALOSCONFIG = {{ $talosConfig | quote }}
 {{ end -}}
 
 if (which direnv | is-not-empty) {

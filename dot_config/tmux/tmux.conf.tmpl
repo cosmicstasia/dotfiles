@@ -14,7 +14,13 @@ set -g history-limit 1000000     # increase history size (from 2,000)
 set -g renumber-windows on       # renumber all windows when any window is closed
 set -g set-clipboard on          # use system clipboard
 set -g status-position top
-set -g default-terminal "${TERM}"
+{{ if eq .chezmoi.os "darwin" -}}
+set-option -g default-shell '/opt/homebrew/bin/nu'
+set-environment -g SHELL '/opt/homebrew/bin/nu'
+{{ else -}}
+set-option -g default-shell '/home/linuxbrew/.linuxbrew/bin/nu'
+set-environment -g SHELL '/home/linuxbrew/.linuxbrew/bin/nu'
+{{ end -}}
 setw -g mode-keys vi
 set -g pane-active-border-style 'fg=magenta,bg=default'
 set -g pane-border-style 'fg=brightblack,bg=default'

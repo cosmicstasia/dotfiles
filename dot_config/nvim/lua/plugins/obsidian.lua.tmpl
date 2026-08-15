@@ -1,6 +1,7 @@
+{{- $obsidianVault := get . "obsidianVault" | default "" -}}
 return {
   "obsidian-nvim/obsidian.nvim",
-{{- if not .obsidianVault }}
+{{- if not $obsidianVault }}
   enabled = false,
 {{- end }}
   version = "*", -- use latest release, remove to use latest commit
@@ -11,7 +12,7 @@ return {
     workspaces = {
       {
         name = "personal",
-        path = {{ .obsidianVault | quote }},
+        path = {{ $obsidianVault | quote }},
       },
     },
   },
