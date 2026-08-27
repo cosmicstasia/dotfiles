@@ -15,7 +15,15 @@ export PATH
 
 command -v starship >/dev/null 2>&1 && starship init nu > "$config_dir/starship.nu"
 command -v zoxide >/dev/null 2>&1 && zoxide init nushell > "$config_dir/zoxide.nu"
-command -v atuin >/dev/null 2>&1 && atuin init nu > "$config_dir/atuin.nu"
+if command -v atuin >/dev/null 2>&1; then
+  atuin init nu | awk '
+    /name: atuin/ {
+      binding++
+      if (binding == 2) sub("name: atuin", "name: atuin_up")
+    }
+    { print }
+  ' > "$config_dir/atuin.nu"
+fi
 command -v tv >/dev/null 2>&1 && tv init nu > "$autoload_dir/tv.nu"
 
 if [ -x "$HOME/.tmux/plugins/tpm/bin/install_plugins" ]; then
