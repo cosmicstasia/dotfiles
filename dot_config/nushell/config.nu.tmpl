@@ -40,8 +40,25 @@ let extra_paths = [
     $"($env.HOME)/.cargo/bin"
     $"($env.HOME)/.bun/bin"
     $"($env.HOME)/.local/bin"
+    "/Library/TeX/texbin"
 ]
 $env.PATH = ($env.PATH | prepend ($extra_paths | where {|path| $path | path exists }) | uniq)
+
+if (which brew | is-not-empty) {
+    let java_prefix_result = (^brew --prefix openjdk@21 | complete)
+    if $java_prefix_result.exit_code == 0 {
+        let java_prefix = ($java_prefix_result.stdout | str trim)
+        let java_home = ([
+            ($java_prefix | path join "libexec/openjdk.jdk/Contents/Home")
+            $java_prefix
+        ] | where {|path| $path | path join "bin/java" | path exists } | get -o 0)
+
+        if $java_home != null {
+            $env.JAVA_HOME = $java_home
+            $env.PATH = ($env.PATH | prepend ($java_home | path join "bin") | uniq)
+        }
+    }
+}
 
 if (which carapace | is-not-empty) {
     let carapace_completer = {|spans: list<string>|
@@ -71,6 +88,9 @@ if (which carapace | is-not-empty) {
         }
     })
 }
+
+# Set Edit Mode to vi 
+$env.config.edit_mode = 'vi'
 
 $env.EDITOR = "nvim"
 $env.KUBECONFIG = ($env.HOME | path join ".kube/config")
