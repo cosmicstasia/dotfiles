@@ -1,8 +1,9 @@
 return {
-    {
-        "jakobkhansen/journal.nvim",
-        config = function()
-            require("journal").setup()
-        end,
-    },
+  {
+    "jakobkhansen/journal.nvim",
+    cmd = "Journal",
+    config = function()
+      require("journal").setup()
+    end,
+  },
 }

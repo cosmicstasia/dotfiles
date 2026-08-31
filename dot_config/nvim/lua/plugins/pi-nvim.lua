@@ -1,6 +1,7 @@
 return {
   "pablopunk/pi.nvim",
   enabled = vim.fn.executable("pi") == 1,
+  cmd = { "PiAsk", "PiAskSelection", "PiCancel", "PiLog" },
   opts = {
     binary = "pi",
     provider = "openai-codex",

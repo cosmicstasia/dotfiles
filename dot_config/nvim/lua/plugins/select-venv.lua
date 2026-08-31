@@ -1,13 +1,14 @@
+local fd = require("config.executable").find({ "fd", "fdfind", "fd_find" })
+
 return {
   "linux-cultist/venv-selector.nvim",
-  dependencies = {
-    "neovim/nvim-lspconfig",
-    "nvim-telescope/telescope.nvim",
-    "nvim-lua/plenary.nvim",
-  },
+  enabled = fd ~= nil,
+  dependencies = { "neovim/nvim-lspconfig" },
   opts = {
-    name = { "venv", ".venv" }, -- Looks for these names in your project
-    auto_refresh = true,
+    options = {
+      fd_binary_name = fd,
+      picker = "snacks",
+    },
   },
   keys = {
     { "<leader>vs", "<cmd>VenvSelect<cr>", desc = "Select VirtualEnv" },
