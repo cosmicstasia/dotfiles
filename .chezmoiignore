@@ -2,6 +2,22 @@ README.md
 **/.DS_Store
 **/.git
 **/.git/**
+
+# Emacs runtime and machine-generated state
+.config/emacs/.cache
+.config/emacs/.local
+.config/emacs/auto-save-list
+.config/emacs/eln-cache
+.config/emacs/elpa
+.config/emacs/eshell
+.config/emacs/transient
+.config/emacs/tree-sitter
+.config/emacs/custom.el~
+.config/emacs/matugen-colors.el
+.config/emacs/projects
+.config/emacs/recentf.eld
+.config/emacs/tramp
+
 {{ if ne .chezmoi.os "darwin" }}
 Library/Application Support/nushell
 {{ end }}

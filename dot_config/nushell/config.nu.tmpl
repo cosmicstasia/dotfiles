@@ -6,6 +6,8 @@ overlay use starship.nu
 overlay use zoxide.nu
 source atuin.nu
 
+use ($nu.default-config-dir | path join "mise.nu")
+
 {{ if $sshAuthSock -}}
 $env.SSH_AUTH_SOCK = {{ $sshAuthSock | quote }}
 {{ else -}}
@@ -15,6 +17,7 @@ if "XDG_RUNTIME_DIR" in $env {
 {{ end -}}
 
 alias python = python3
+alias emacs = emacs -nw
 alias oc = opencode
 alias v = nvim
 alias vim = nvim
