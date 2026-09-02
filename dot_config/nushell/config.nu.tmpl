@@ -102,11 +102,4 @@ $env.BUN_INSTALL = ($env.HOME | path join ".bun")
 $env.TALOSCONFIG = {{ $talosConfig | quote }}
 {{ end -}}
 
-if (which direnv | is-not-empty) {
-    $env.config.hooks.env_change.PWD = (
-        $env.config.hooks.env_change.PWD? | default []
-        | append {|before, after| direnv export json | from json | default {} | load-env }
-    )
-}
-
 use std/formats "from ndjson"

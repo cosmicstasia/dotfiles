@@ -4,7 +4,7 @@ Cross-platform configuration for macOS and Arch Linux, managed by chezmoi.
 
 ## What Is Shared
 
-- Nushell, Starship, Zoxide, Atuin, and direnv
+- Nushell, Starship, Zoxide, and Atuin
 - Git and SSH signing settings
 - Neovim, tmux, Kitty, Yazi, btop, and Herdr configuration
 - Command-line packages through Homebrew on macOS and Linuxbrew on Arch
