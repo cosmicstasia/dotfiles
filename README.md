@@ -7,10 +7,10 @@ Cross-platform configuration for the MacBook (macOS) and the Omarchy desktop
 
 - **zsh** is the login shell on both machines (`~/.zshenv`, `~/.zprofile`,
   `~/.zshrc`). kitty, tmux, herdr, Neovim terminals and tuios panes all start it.
-- **tuios** is the terminal workspace: a top-level zsh in kitty (or any local
-  terminal) runs `tuios attach`, which restores or creates a session. It is
-  skipped inside tuios/tmux/herdr/zellij, editors and SSH logins. Set
-  `TUIOS_AUTOSTART=0` to get a plain shell; kitty splits already do.
+- **tuios** is the terminal workspace, opt-in: terminals open a plain zsh. Set
+  `TUIOS_AUTOSTART=1` and a top-level zsh runs `tuios attach`, which restores
+  or creates a session (skipped inside tuios/tmux/herdr/zellij, editors and
+  SSH logins). On Omarchy, `Super+Alt+Return` opens a terminal straight into tuios.
 - On Omarchy, `~/.config/xdg-terminals.list` makes kitty the default terminal.
 
 ## Theming

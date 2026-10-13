@@ -7,11 +7,11 @@ if (( $+commands[mise] )); then
   eval "$(mise activate zsh)"
 fi
 
-# Every top-level terminal opens into tuios. Skipped inside tuios, tmux,
-# herdr, zellij, editors and SSH logins, and when TUIOS_AUTOSTART=0 (kitty
-# splits set that). Detaching or quitting tuios closes the terminal; if tuios
-# fails to start, this shell carries on.
-if [[ -t 0 && -t 1 && ${TUIOS_AUTOSTART:-1} != 0 && $TERM != dumb \
+# Terminals open a plain shell. Set TUIOS_AUTOSTART=1 to open into tuios
+# instead (skipped inside tuios, tmux, herdr, zellij, editors and SSH logins).
+# Detaching or quitting tuios then closes the terminal; if tuios fails to
+# start, this shell carries on.
+if [[ -t 0 && -t 1 && ${TUIOS_AUTOSTART:-0} == 1 && $TERM != dumb \
       && -z ${TUIOS_ENV:-} && -z ${TMUX:-} && -z ${HERDR_ENV:-} && -z ${ZELLIJ:-} \
       && -z ${SSH_CONNECTION:-} && -z ${INSIDE_EMACS:-} && -z ${NVIM:-} \
       && ${TERM_PROGRAM:-} != (vscode|zed) \
