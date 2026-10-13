@@ -138,8 +138,21 @@ fi
 # plugins are git checkouts chezmoi keeps in ~/.local/share/zsh/plugins.
 typeset -ga ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
-for __plugin in zsh-autosuggestions zsh-syntax-highlighting; do
-  [[ -r $HOME/.local/share/zsh/plugins/$__plugin/$__plugin.zsh ]] \
-    && source "$HOME/.local/share/zsh/plugins/$__plugin/$__plugin.zsh"
-done
-unset __plugin
+__plugins=$HOME/.local/share/zsh/plugins
+[[ -r $__plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]] \
+  && source "$__plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+# fast-syntax-highlighting, themed by ~/.config/fsh/palette.ini. The theme
+# uses only the 16 terminal colours, so it follows kitty's theme: Omarchy's on
+# the desktop (live, on every theme switch), the Mac's own on the Mac.
+# fast-theme compiles the ini into its cache; redo that when the ini changes.
+if [[ -r $__plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh ]]; then
+  source "$__plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+  __fsh_ini=${XDG_CONFIG_HOME:-$HOME/.config}/fsh/palette.ini
+  if [[ -r $__fsh_ini && ( ! -e $FAST_WORK_DIR/current_theme.zsh
+        || $__fsh_ini -nt $FAST_WORK_DIR/current_theme.zsh ) ]]; then
+    fast-theme -q XDG:palette
+  fi
+  unset __fsh_ini
+fi
+unset __plugins

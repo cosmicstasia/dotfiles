@@ -1,3 +1,5 @@
 # Superseded by the managed ~/.zshrc.
 .config/zsh/nushell-migration.zsh
+# Replaced by fast-syntax-highlighting (see .chezmoiexternal.toml).
+.local/share/zsh/plugins/zsh-syntax-highlighting
 
