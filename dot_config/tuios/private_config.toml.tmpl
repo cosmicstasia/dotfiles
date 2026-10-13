@@ -131,7 +131,8 @@ kitty_placeholders = 'auto'
 auto_enter_terminal_on_focus = 'off'
 click_to_type = 'double'
 dockbar_position = 'top'
-preferred_shell = 'zsh'
+# Absolute path: the daemon logs `configured shell "zsh" not found` for the bare name.
+preferred_shell = '/usr/bin/zsh'
 motion = 'full'
 modal_dim = 30
 whichkey_position = ''
@@ -579,6 +580,7 @@ mail_reply = ['r']
 mail_up = ['k', 'up', 'ctrl+p']
 
 [daemon]
+ssh_agent = 'follow'
 log_level = 'off'
 agent_detect_seconds = 0
 agent_binaries = []

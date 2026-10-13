@@ -13,4 +13,9 @@ theme:
 {{- end }}
 setupVersion: 2
 modelRoles:
+{{- if get . "nineRouterApiKey" }}
+  # 9router provider comes from models.yml, rendered only when its key is set.
+  default: 9router/cc/claude-opus-5-5:high
+{{- else }}
   {}
+{{- end }}

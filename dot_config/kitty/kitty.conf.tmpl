@@ -1,11 +1,13 @@
 {{- $omarchyTheme := includeTemplate "omarchy-theme" . | trim -}}
 {{- if $omarchyTheme -}}
-# Omarchy owns colours, font and opacity (its theme plus
-# /etc/xdg/kitty/kitty.conf); this file only adds behaviour.
+# Omarchy supplies colours, font family and opacity; local overrides follow.
 {{- if stat "/etc/xdg/kitty/kitty.conf" }}
 include /etc/xdg/kitty/kitty.conf
 {{- end }}
 include {{ $omarchyTheme }}/kitty.conf
+
+# Local font size override, independent of the Omarchy theme.
+font_size 12
 {{- else -}}
 include themes/noctalia.conf
 {{- end }}

@@ -8,4 +8,5 @@
 [hosts.{{ $peerName }}]
 addr = {{ $peerAddr | quote }}
 connect_timeout = 10
+ssh_options = ["-A"]
 {{ end -}}

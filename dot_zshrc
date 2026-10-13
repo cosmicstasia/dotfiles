@@ -7,6 +7,24 @@ if (( $+commands[mise] )); then
   eval "$(mise activate zsh)"
 fi
 
+# In a TUIOS pane, follow the SSH agent of the most recently used client
+# session; re-resolved before every prompt so reconnects take effect.
+# Outside TUIOS this fails silently and keeps this machine's agent.
+if (( $+commands[tuios] )); then
+  __tuios_refresh_agent() {
+    local sock
+    sock=$(tuios ssh-agent-path 2>/dev/null) && export SSH_AUTH_SOCK="$sock"
+  }
+  autoload -Uz add-zsh-hook
+  add-zsh-hook precmd __tuios_refresh_agent
+  __tuios_refresh_agent
+fi
+
+# Homebrew keeps PostgreSQL client tools keg-only on macOS.
+if [[ -d /opt/homebrew/opt/libpq/bin ]]; then
+  path=(/opt/homebrew/opt/libpq/bin $path)
+fi
+
 # Terminals open a plain shell. Set TUIOS_AUTOSTART=1 to open into tuios
 # instead (skipped inside tuios, tmux, herdr, zellij, editors and SSH logins).
 # Detaching or quitting tuios then closes the terminal; if tuios fails to
