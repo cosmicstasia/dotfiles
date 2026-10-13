@@ -7,13 +7,19 @@ if (( $+commands[mise] )); then
   eval "$(mise activate zsh)"
 fi
 
-# In a TUIOS pane, follow the SSH agent of the most recently used client
-# session; re-resolved before every prompt so reconnects take effect.
-# Outside TUIOS this fails silently and keeps this machine's agent.
+# In a TUIOS pane, use the SSH agent of the client that used the session last:
+# the forwarded agent while connected remotely, this machine's agent locally.
+# Re-resolved before every prompt so reconnects take effect; when the forwarded
+# socket is gone, fall back to the local agent set in ~/.zshenv.
 if (( $+commands[tuios] )); then
   __tuios_refresh_agent() {
     local sock
-    sock=$(tuios ssh-agent-path 2>/dev/null) && export SSH_AUTH_SOCK="$sock"
+    sock=$(tuios ssh-agent-path 2>/dev/null) || return
+    if [[ -S $sock ]]; then
+      export SSH_AUTH_SOCK=$sock
+    elif [[ -n ${__dotfiles_local_agent:-} ]]; then
+      export SSH_AUTH_SOCK=$__dotfiles_local_agent
+    fi
   }
   autoload -Uz add-zsh-hook
   add-zsh-hook precmd __tuios_refresh_agent

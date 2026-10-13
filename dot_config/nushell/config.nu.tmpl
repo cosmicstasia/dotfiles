@@ -10,13 +10,17 @@ source ~/.config/nushell/yazi.nu
 
 use ($nu.default-config-dir | path join "mise.nu")
 
-{{ if $sshAuthSock -}}
-$env.SSH_AUTH_SOCK = {{ $sshAuthSock | quote }}
-{{ else -}}
-if "XDG_RUNTIME_DIR" in $env {
-    $env.SSH_AUTH_SOCK = ($env.XDG_RUNTIME_DIR | path join "ssh-agent.socket")
+# A remote session keeps the forwarded agent it inherits; otherwise use this
+# machine's own agent.
+if ($env.SSH_AUTH_SOCK? | is-empty) {
+{{- if $sshAuthSock }}
+    $env.SSH_AUTH_SOCK = {{ $sshAuthSock | quote }}
+{{- else }}
+    if "XDG_RUNTIME_DIR" in $env {
+        $env.SSH_AUTH_SOCK = ($env.XDG_RUNTIME_DIR | path join "ssh-agent.socket")
+    }
+{{- end }}
 }
-{{ end -}}
 
 alias python = python3
 alias emacs = emacs -nw

@@ -70,8 +70,17 @@ socket) per OS; accept them or clear `gitSigningKey` to turn signing off.
 `~/.gitconfig` then sets `gpg.format = ssh` and `commit.gpgsign = true`, and
 `~/.config/git/allowed_signers` lets `git verify-commit` trust the key.
 
-`~/.zshenv` exports `SSH_AUTH_SOCK` from `sshAuthSock`. 1Password only serves
-the Personal vault by default; list other vaults in
+Which agent is used depends on how you're connected. A remote SSH session
+(`ssh -A`) keeps the forwarded agent it inherits, so signing and SSH use the
+client machine's 1Password. Otherwise `~/.zshenv` and nushell set
+`SSH_AUTH_SOCK` from `sshAuthSock`, this machine's 1Password agent. tuios panes
+re-resolve it before every prompt (`tuios ssh-agent-path`): the forwarded agent
+while a remote client uses the session, the local agent once that socket is
+gone. Git signs through `~/.local/bin/git-ssh-sign`, which uses the agent in
+`SSH_AUTH_SOCK` when it holds the signing key and otherwise falls back to
+`gitSigningProgram`.
+
+1Password only serves the Personal vault by default; list other vaults in
 `~/.config/1Password/ssh/agent.toml` (per account, not managed here).
 
 ## omp

@@ -1,0 +1,23 @@
+#!/bin/sh
+# Git's SSH signer (gpg.ssh.program). Signs through the agent in SSH_AUTH_SOCK
+# when that agent holds the signing key: the forwarded agent while connected
+# remotely, the local 1Password agent otherwise. Falls back to 1Password's own
+# signer, e.g. for GUI apps whose SSH_AUTH_SOCK is the system agent.
+# Managed by chezmoi: edit private_dot_local/bin/executable_git-ssh-sign.tmpl.
+if [ "$1" = "-Y" ] && [ "$2" = "sign" ]; then
+  key=
+  prev=
+  for arg in "$@"; do
+    [ "$prev" = "-f" ] && key=$arg
+    prev=$arg
+  done
+  if [ -n "${SSH_AUTH_SOCK:-}" ] && [ -n "$key" ] \
+    && pub=$(cut -d' ' -f1,2 "$key" 2>/dev/null) && [ -n "$pub" ] \
+    && ssh-add -L 2>/dev/null | cut -d' ' -f1,2 | grep -qxF "$pub"; then
+    exec ssh-keygen "$@"
+  fi
+{{- if .gitSigningProgram }}
+  exec {{ .gitSigningProgram | quote }} "$@"
+{{- end }}
+fi
+exec ssh-keygen "$@"

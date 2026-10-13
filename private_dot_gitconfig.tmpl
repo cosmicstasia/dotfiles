@@ -21,7 +21,9 @@
 [gpg]
 	format = ssh
 [gpg "ssh"]
-	program = {{ $gitSigningProgram | quote }}
+	# Signs through the agent in SSH_AUTH_SOCK (forwarded over SSH, 1Password
+	# locally); falls back to gitSigningProgram. See ~/.local/bin/git-ssh-sign.
+	program = {{ printf "%s/.local/bin/git-ssh-sign" .chezmoi.homeDir | quote }}
 	allowedSignersFile = ~/.config/git/allowed_signers
 [commit]
 	gpgsign = true

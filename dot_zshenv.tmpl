@@ -12,12 +12,19 @@ export BUN_INSTALL="$HOME/.bun"
 {{ if $talosConfig -}}
 export TALOSCONFIG={{ $talosConfig | quote }}
 {{ end -}}
+# This machine's own agent. A remote session keeps the forwarded agent it
+# inherits; everything else uses this one. ~/.zshrc falls back to it when a
+# tuios pane's forwarded agent goes away.
+{{ if $sshAuthSock -}}
+__dotfiles_local_agent={{ $sshAuthSock | quote }}
+{{ else -}}
+__dotfiles_local_agent="${XDG_RUNTIME_DIR:-/nonexistent}/ssh-agent.socket"
+{{ end -}}
 if [[ -z ${SSH_AUTH_SOCK:-} ]]; then
 {{ if $sshAuthSock -}}
-  export SSH_AUTH_SOCK={{ $sshAuthSock | quote }}
+  export SSH_AUTH_SOCK=$__dotfiles_local_agent
 {{ else -}}
-  [[ -S ${XDG_RUNTIME_DIR:-/nonexistent}/ssh-agent.socket ]] \
-    && export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+  [[ -S $__dotfiles_local_agent ]] && export SSH_AUTH_SOCK=$__dotfiles_local_agent
 {{ end -}}
 fi
 # User directories go in front of the system PATH. mise shims make the
