@@ -1,4 +1,11 @@
+{{- $omarchyTheme := includeTemplate "omarchy-theme" . | trim -}}
+{{- if $omarchyTheme -}}
+# Omarchy: ANSI colours, so the prompt follows the terminal palette that the
+# Omarchy theme sets.
+palette = "omarchy"
+{{- else -}}
 palette = "catppuccin_mocha"
+{{- end }}
 add_newline = true
 command_timeout = 500
 format = "$directory$git_branch$git_status$cmd_duration$character"
@@ -69,3 +76,16 @@ surface0 = "#313244"
 base = "#1e1e2e"
 mantle = "#181825"
 crust = "#11111b"
+{{- if $omarchyTheme }}
+
+# The colour names above, mapped onto the terminal's ANSI palette.
+[palettes.omarchy]
+blue = "blue"
+lavender = "bright-blue"
+mauve = "purple"
+red = "red"
+green = "green"
+yellow = "yellow"
+peach = "bright-yellow"
+overlay1 = "bright-black"
+{{- end }}

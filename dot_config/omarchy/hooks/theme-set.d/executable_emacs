@@ -1,0 +1,6 @@
+#!/bin/bash
+# Omarchy runs theme-set hooks after every theme change, with the theme name.
+# Hand it to Emacs, which maps it onto its own theme (or remembers it for the
+# next start when no Emacs server is running).
+[[ -x $HOME/.config/emacs/change-emacs-theme.sh ]] || exit 0
+"$HOME/.config/emacs/change-emacs-theme.sh" "$1" >/dev/null

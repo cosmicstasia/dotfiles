@@ -1,0 +1,4 @@
+{{- $omarchyTheme := includeTemplate "omarchy-theme" . | trim -}}
+{{- if $omarchyTheme -}}
+{{ $omarchyTheme }}/btop.theme
+{{- end -}}

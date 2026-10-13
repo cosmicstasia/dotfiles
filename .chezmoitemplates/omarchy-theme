@@ -1,0 +1,16 @@
+{{- /*
+  Prints the directory holding the active Omarchy theme when this machine runs
+  Omarchy, and nothing otherwise. Omarchy 4 keeps it under ~/.local/state,
+  Omarchy 3.x under ~/.config. Templates use it to hand theming to Omarchy on
+  the desktop while the Mac keeps its own colours:
+
+    {{- $omarchyTheme := includeTemplate "omarchy-theme" . | trim -}}
+*/ -}}
+{{- $home := .chezmoi.homeDir -}}
+{{- if and (eq .chezmoi.os "linux") (stat (joinPath $home ".local/share/omarchy")) -}}
+{{-   if or (stat (joinPath $home ".local/state/omarchy/current")) (not (stat (joinPath $home ".config/omarchy/current"))) -}}
+{{-     joinPath $home ".local/state/omarchy/current/theme" -}}
+{{-   else -}}
+{{-     joinPath $home ".config/omarchy/current/theme" -}}
+{{-   end -}}
+{{- end -}}

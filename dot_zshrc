@@ -116,9 +116,13 @@ if (( $+commands[atuin] )); then
   eval "$(atuin init zsh --disable-ai)"
 fi
 
-# Starship draws both the left and right prompts from starship.toml.
+# Starship draws both the left and right prompts from starship.toml. Its init
+# script hardcodes the binary's absolute path into PROMPT; call it by name
+# instead, so a running shell survives mise upgrading or moving starship.
 if (( $+commands[starship] )); then
-  eval "$(starship init zsh)"
+  __starship_bin=${commands[starship]}
+  eval "${$(starship init zsh --print-full-init)//$__starship_bin/starship}"
+  unset __starship_bin
 fi
 
 # Worktrunk shell integration.

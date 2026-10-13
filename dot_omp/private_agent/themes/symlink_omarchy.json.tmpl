@@ -1,0 +1,4 @@
+{{- $omarchyTheme := includeTemplate "omarchy-theme" . | trim -}}
+{{- if $omarchyTheme -}}
+{{ $omarchyTheme }}/omp.json
+{{- end -}}

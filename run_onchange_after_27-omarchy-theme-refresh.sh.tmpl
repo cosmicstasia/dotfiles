@@ -1,0 +1,11 @@
+{{- if includeTemplate "omarchy-theme" . | trim -}}
+#!/bin/sh
+# Omarchy only: render the user templates in ~/.config/omarchy/themed (omp.json,
+# tuios.toml) into the active theme. Re-run when a template changes:
+# {{ include "dot_config/omarchy/themed/omp.json.tpl" | sha256sum }}
+# {{ include "dot_config/omarchy/themed/tuios.toml.tpl" | sha256sum }}
+set -eu
+
+command -v omarchy-theme-refresh >/dev/null 2>&1 || exit 0
+omarchy-theme-refresh || echo "omarchy-theme-refresh failed; run it from the desktop session" >&2
+{{ end -}}

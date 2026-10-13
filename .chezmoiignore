@@ -38,3 +38,23 @@ Library
 {{ if ne .chezmoi.os "linux" }}
 .config/xdg-terminals.list
 {{ end }}
+
+# Theming: on Omarchy every app follows the Omarchy theme; elsewhere (the Mac)
+# apps keep their own colours. See .chezmoitemplates/omarchy-theme.
+{{ if includeTemplate "omarchy-theme" . | trim }}
+.config/kitty/themes
+# omarchy-theme-set-pi writes this on every theme change.
+.pi/agent/themes/omarchy-system.json
+# The Omarchy theme-set hook keeps this in step with the desktop theme.
+.config/emacs/current-theme
+{{ else }}
+.config/omarchy
+.config/btop/themes
+.config/nvim/lua/plugins/theme.lua
+.config/nvim/lua/plugins/omarchy-theme-hotreload.lua
+.config/nvim/lua/plugins/all-themes.lua
+.config/nvim/lua/plugins/lualine-transparent.lua
+.config/nvim/plugin
+.omp/agent/themes
+.config/tuios/config.d/omarchy.toml
+{{ end }}

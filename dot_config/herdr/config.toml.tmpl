@@ -1,5 +1,17 @@
+{{- $omarchyTheme := includeTemplate "omarchy-theme" . | trim -}}
 onboarding = false
 
+{{ if $omarchyTheme -}}
+# Omarchy: herdr draws with the terminal palette, which Omarchy's theme sets,
+# exactly as Omarchy's own herdr config does.
+[theme]
+name = "terminal"
+
+auto_switch = false
+[theme.custom]
+panel_bg = "reset"
+surface_dim = "black"
+{{- else -}}
 # Match the Catppuccin Mocha styling used by tmux.
 [theme]
 name = "catppuccin"
@@ -25,6 +37,7 @@ green = "#a6e3a1"
 yellow = "#f9e2af"
 peach = "#fab387"
 red = "#f38ba8"
+{{- end }}
 
 [terminal]
 default_shell = "/bin/zsh"
@@ -60,7 +73,7 @@ resize_pane_right = "prefix+."
 resize_pane_up = "prefix+="
 
 [ui]
-accent = "#cba6f7"
+accent = {{ if $omarchyTheme }}"blue"{{ else }}"#cba6f7"{{ end }}
 tab_bar_position = "top"
 hide_tab_bar_when_single_tab = false
 pane_borders = "auto"

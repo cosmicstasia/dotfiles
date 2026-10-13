@@ -1,12 +1,24 @@
+{{- $omarchyTheme := includeTemplate "omarchy-theme" . | trim -}}
+{{- if $omarchyTheme -}}
+# Omarchy owns colours, font and opacity (its theme plus
+# /etc/xdg/kitty/kitty.conf); this file only adds behaviour.
+{{- if stat "/etc/xdg/kitty/kitty.conf" }}
+include /etc/xdg/kitty/kitty.conf
+{{- end }}
+include {{ $omarchyTheme }}/kitty.conf
+{{- else -}}
 include themes/noctalia.conf
+{{- end }}
 
 editor nvim
 
+{{ if not $omarchyTheme -}}
 font_size 14.0
 draw_minimal_borders yes
 inactive_text_alpha 0.7
-confirm_os_window_close 0
 background_opacity 0.90
+{{ end -}}
+confirm_os_window_close 0
 # zsh starts tuios itself (see ~/.zshrc), so every OS window lands in tuios.
 # Kitty splits opt out and stay plain zsh.
 shell /bin/zsh --login

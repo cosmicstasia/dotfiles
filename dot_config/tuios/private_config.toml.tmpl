@@ -1,3 +1,4 @@
+{{- $omarchyTheme := includeTemplate "omarchy-theme" . | trim -}}
 # TUIOS Configuration File
 # This file allows you to customize appearance and keybindings
 #
@@ -139,7 +140,12 @@ hide_clock = false
 show_clock = true
 show_cpu = false
 show_ram = false
+{{- if $omarchyTheme }}
+# Omarchy: no tuios theme, so tuios uses the terminal palette Omarchy sets.
+theme = ''
+{{- else }}
 theme = 'catppuccin_mocha'
+{{- end }}
 border_focused_color = ''
 border_unfocused_color = ''
 window_title_format = ''
@@ -172,6 +178,12 @@ track = ''
 tint = 'quiet'
 
 [appearance.selection]
+{{- if $omarchyTheme }}
+# Omarchy: the selection colours come from config.d/omarchy.toml, which Omarchy
+# renders from its theme (~/.config/omarchy/themed/tuios.toml.tpl). config.toml
+# outranks config.d, so they are left out here.
+fg = ''
+{{- else }}
 bg = '#45475A'
 fg = ''
 search_bg = '#8A6D2F'
@@ -180,6 +192,7 @@ match_bg = '#E5A93D'
 match_fg = '#1C1B19'
 cursor_bg = '#39C5CF'
 cursor_fg = '#08222B'
+{{- end }}
 flash = true
 flash_ms = 420
 flash_style = 'diagonal'

@@ -1,0 +1,5 @@
+{{- /* Omarchy's copy: a status line on the terminal background. */ -}}
+{{- $target := "/usr/share/omarchy-nvim/config/lua/plugins/lualine-transparent.lua" -}}
+{{- if and (includeTemplate "omarchy-theme" . | trim) (stat $target) -}}
+{{ $target }}
+{{- end -}}

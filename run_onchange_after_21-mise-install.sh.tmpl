@@ -3,6 +3,15 @@
 # {{ include "dot_config/mise/config.toml" | sha256sum }}
 set -eu
 
+# Most tools resolve through the GitHub API, which allows 60 anonymous
+# requests an hour; a fresh install needs more. Borrow gh's token if there is one.
+if [ -z "${GITHUB_TOKEN:-}" ] && command -v gh >/dev/null 2>&1; then
+  token=$(gh auth token 2>/dev/null || true)
+  if [ -n "$token" ]; then
+    export GITHUB_TOKEN="$token"
+  fi
+fi
+
 mise=$(command -v mise || echo "$HOME/.local/bin/mise")
 "$mise" install --yes
 "$mise" reshim

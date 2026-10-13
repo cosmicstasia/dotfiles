@@ -1,0 +1,5 @@
+{{- /* Omarchy's copy, so theme hot-reload follows omarchy-nvim updates. */ -}}
+{{- $target := "/usr/share/omarchy-nvim/config/lua/plugins/omarchy-theme-hotreload.lua" -}}
+{{- if and (includeTemplate "omarchy-theme" . | trim) (stat $target) -}}
+{{ $target }}
+{{- end -}}

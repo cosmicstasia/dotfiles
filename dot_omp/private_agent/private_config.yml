@@ -1,8 +1,0 @@
-symbolPreset: nerd
-composer:
-  shape: band
-theme:
-  dark: dark-catppuccin
-setupVersion: 2
-modelRoles:
-  {}

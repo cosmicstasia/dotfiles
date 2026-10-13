@@ -1,3 +1,6 @@
+{{- /* Mac only. On Omarchy this renders empty, so chezmoi removes it and
+  theme.lua (Omarchy's active theme) picks the colorscheme. */ -}}
+{{- if not (includeTemplate "omarchy-theme" . | trim) -}}
 return {
   {
     "catppuccin/nvim",
@@ -22,3 +25,4 @@ return {
     },
   },
 }
+{{- end }}

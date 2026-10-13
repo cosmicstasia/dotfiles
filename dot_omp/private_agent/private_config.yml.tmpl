@@ -1,0 +1,16 @@
+{{- $omarchyTheme := includeTemplate "omarchy-theme" . | trim -}}
+symbolPreset: nerd
+composer:
+  shape: band
+theme:
+{{- if $omarchyTheme }}
+  # Omarchy: rendered from ~/.config/omarchy/themed/omp.json.tpl on every
+  # theme change and linked as themes/omarchy.json.
+  dark: omarchy
+  light: omarchy
+{{- else }}
+  dark: dark-catppuccin
+{{- end }}
+setupVersion: 2
+modelRoles:
+  {}

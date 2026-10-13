@@ -1,0 +1,5 @@
+{{- /* Omarchy's active Neovim theme, linked the way omarchy-nvim-setup links it. */ -}}
+{{- $omarchyTheme := includeTemplate "omarchy-theme" . | trim -}}
+{{- if $omarchyTheme -}}
+../../../../{{ trimPrefix (printf "%s/" .chezmoi.homeDir) $omarchyTheme }}/neovim.lua
+{{- end -}}

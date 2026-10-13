@@ -1,3 +1,4 @@
+{{- $omarchyTheme := includeTemplate "omarchy-theme" . | trim -}}
 source-file ~/.config/tmux/tmux.reset.conf
 set-option -g default-terminal 'tmux-256color'
 set-option -as terminal-features ',xterm-ghostty:RGB:clipboard:ccolour:cstyle:extkeys:focus:hyperlinks:osc7:overline:strikethrough'
@@ -18,7 +19,11 @@ set -g status-position top
 set-option -g default-shell '/bin/zsh'
 set-environment -g SHELL '/bin/zsh'
 setw -g mode-keys vi
+{{- if $omarchyTheme }}
+set -g pane-active-border-style 'fg=blue,bg=default'
+{{- else }}
 set -g pane-active-border-style 'fg=magenta,bg=default'
+{{- end }}
 set -g pane-border-style 'fg=brightblack,bg=default'
 
 set -g @fzf-url-fzf-options '-p 60%,30% --prompt="   " --border-label=" Open URL "'
@@ -32,7 +37,9 @@ set -g @plugin 'tmux-plugins/tmux-continuum'
 set -g @plugin 'fcsonline/tmux-thumbs'
 set -g @plugin 'sainnhe/tmux-fzf'
 set -g @plugin 'wfxr/tmux-fzf-url'
+{{- if not $omarchyTheme }}
 set -g @plugin 'omerxx/catppuccin-tmux' # My fork that holds the meetings script bc I'm lazy af
+{{- end }}
 set -g @plugin 'omerxx/tmux-floax'
 set -g @floax-width '80%'
 set -g @floax-height '80%'
@@ -42,6 +49,20 @@ set -g @floax-bind 'p'
 set -g @floax-change-path 'true'
 set -g @continuum-restore 'on'
 set -g @resurrect-strategy-nvim 'session'
+{{ if $omarchyTheme -}}
+# Omarchy: draw with the terminal palette, which Omarchy's theme sets (and
+# omarchy-theme-set-tmux pushes into running sessions), like Omarchy's own
+# tmux.conf.
+set -g status-style "bg=default,fg=default"
+set -g status-left "#[fg=black,bg=blue,bold] #S #[bg=default] "
+set -g status-right "#[fg=blue]#{?pane_in_mode,COPY ,}#{?client_prefix,PREFIX ,}#{?window_zoomed_flag,ZOOM ,}#[fg=brightblack]%a %d %b · %H:%M "
+set -g window-status-separator ""
+set -g window-status-format "#[fg=brightblack] #I:#W "
+set -g window-status-current-format "#[fg=blue,bold] #I:#W "
+set -g message-style "bg=default,fg=blue"
+set -g message-command-style "bg=default,fg=blue"
+set -g mode-style "bg=blue,fg=black"
+{{- else -}}
 # Catppuccin status bar: compact inactive windows, a clear active window,
 # and useful context on the right without turning the bar into a dashboard.
 set -g @catppuccin_flavour "mocha"
@@ -79,6 +100,7 @@ set -g @catppuccin_date_time_text "%a %d %b · %H:%M"
 {{ if eq .chezmoi.os "darwin" -}}
 set -g @catppuccin_meetings_text "#($HOME/.config/tmux/scripts/cal.sh)"
 {{ end }}
+{{- end }}
 # Bindings
 bind-key n command-prompt -p "New session name: " "new-session -s '%%'"
 bind-key '$' command-prompt -I '#S' -p "Rename session: " "rename-session '%%'"
@@ -90,8 +112,13 @@ bind-key o display-popup -E -w 80% -h 70% \
   -d "#{pane_current_path}" \
   -T " sesh " \
   -b rounded \
+{{- if $omarchyTheme }}
+  -s "fg=default,bg=default" \
+  -S "fg=blue,bg=default,bold" \
+{{- else }}
   -s "fg=#cdd6f4,bg=#1e1e2e" \
   -S "fg=#cba6f7,bg=#1e1e2e,bold" \
+{{- end }}
   /bin/bash "$HOME/.config/tmux/scripts/sesh-switcher.sh"
 
 # Prefix + - → horizontal split (top/bottom)

@@ -1,0 +1,7 @@
+{{- $omarchyTheme := includeTemplate "omarchy-theme" . | trim -}}
+vim_keys = False
+{{- if $omarchyTheme }}
+# Omarchy: themes/current.theme links to the active Omarchy theme.
+color_theme = "current"
+theme_background = true
+{{- end }}

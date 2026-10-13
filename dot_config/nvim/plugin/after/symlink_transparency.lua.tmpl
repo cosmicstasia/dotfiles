@@ -1,0 +1,5 @@
+{{- /* Omarchy's copy: transparent editor backgrounds. */ -}}
+{{- $target := "/usr/share/omarchy-nvim/config/plugin/after/transparency.lua" -}}
+{{- if and (includeTemplate "omarchy-theme" . | trim) (stat $target) -}}
+{{ $target }}
+{{- end -}}

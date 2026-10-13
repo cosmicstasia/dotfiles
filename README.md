@@ -13,6 +13,23 @@ Cross-platform configuration for the MacBook (macOS) and the Omarchy desktop
   `TUIOS_AUTOSTART=0` to get a plain shell; kitty splits already do.
 - On Omarchy, `~/.config/xdg-terminals.list` makes kitty the default terminal.
 
+## Theming
+
+On Omarchy every app follows the Omarchy theme and changes with it; on the Mac
+each app keeps its own colours (Catppuccin Mocha, Noctalia for kitty). Templates
+tell the two apart with `.chezmoitemplates/omarchy-theme`, which finds the active
+Omarchy theme directory (`~/.local/state/omarchy/current/theme` on Omarchy 4).
+
+| App | On Omarchy |
+| --- | --- |
+| Neovim | `lua/plugins/theme.lua` links the theme's `neovim.lua`, plus omarchy-nvim's hot-reload, all-themes and transparency files; `colorscheme.lua` is Mac-only |
+| kitty | includes Omarchy's defaults and the theme's `kitty.conf`; no font, opacity or theme of its own |
+| tmux, herdr, tuios, starship | draw with the terminal (ANSI) palette, as Omarchy's own configs do |
+| btop | `color_theme = "current"`, linked to the theme's `btop.theme` |
+| tuios selection colours, omp | rendered by Omarchy from `~/.config/omarchy/themed/*.tpl` on every theme change |
+| pi | `omarchy-theme-set-pi` owns `omarchy-system.json` |
+| Emacs | `~/.config/omarchy/hooks/theme-set.d/emacs` passes the theme name on |
+
 ## Packages
 
 - **mise** (`~/.config/mise/config.toml`) installs the shared CLI toolchain and
