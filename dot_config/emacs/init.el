@@ -7,8 +7,10 @@
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 (when (eq system-type 'darwin)
-  ;; GUI Emacs does not inherit Homebrew's shell PATH.
-  (dolist (directory '("/opt/homebrew/bin" "/usr/local/bin"))
+  ;; GUI Emacs does not inherit the shell PATH. Later entries end up first,
+  ;; so mise shims take precedence over the remaining Homebrew formulae.
+  (dolist (directory (list "/opt/homebrew/bin" "/usr/local/bin"
+                           (expand-file-name "~/.local/share/mise/shims")))
     (when (file-directory-p directory)
       (setq exec-path (cons directory (delete directory exec-path)))
       (unless (member directory (split-string (or (getenv "PATH") "") path-separator t))

@@ -1,0 +1,3 @@
+# Omarchy launches terminals through xdg-terminal-exec; kitty opens zsh,
+# which attaches tuios. Same file `omarchy-default-terminal kitty` writes.
+kitty.desktop

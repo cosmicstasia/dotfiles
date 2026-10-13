@@ -1,0 +1,48 @@
+{{- $sshAuthSock := get . "sshAuthSock" | default "" -}}
+{{- $talosConfig := get . "talosConfig" | default "" -}}
+# Environment for every zsh: login, interactive, scripts, `ssh host cmd`,
+# and the panes tuios and herdr spawn. Keep this file fast and silent.
+# Managed by chezmoi: edit ~/.local/share/chezmoi/dot_zshenv.tmpl.
+
+export EDITOR=nvim
+export VISUAL=nvim
+export TERMINAL=kitty
+export KUBECONFIG="$HOME/.kube/config"
+export BUN_INSTALL="$HOME/.bun"
+{{ if $talosConfig -}}
+export TALOSCONFIG={{ $talosConfig | quote }}
+{{ end -}}
+{{ if $sshAuthSock -}}
+export SSH_AUTH_SOCK={{ $sshAuthSock | quote }}
+{{ else -}}
+if [[ -z ${SSH_AUTH_SOCK:-} && -S ${XDG_RUNTIME_DIR:-/nonexistent}/ssh-agent.socket ]]; then
+  export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+fi
+{{ end }}
+# User directories go in front of the system PATH. mise shims make the
+# mise-managed tools visible to non-interactive shells too (scripts, editors,
+# the ssh link `tuios hosts` opens to the other machine); interactive shells
+# replace them with real paths through `mise activate` in ~/.zshrc.
+# ~/.zprofile calls this again because macOS path_helper reorders PATH.
+__dotfiles_path() {
+  typeset -gU path
+  local -a front
+  local dir
+  for dir in \
+    "$HOME/.local/bin" \
+    "$HOME/.local/share/mise/shims" \
+    "$HOME/.cargo/bin" \
+    "$BUN_INSTALL/bin" \
+{{- if eq .chezmoi.os "darwin" }}
+    /opt/homebrew/bin \
+    /opt/homebrew/sbin \
+    /Library/TeX/texbin \
+{{- else }}
+    "$HOME/.local/share/omarchy/bin" \
+{{- end }}
+    ; do
+    [[ -d $dir ]] && front+=("$dir")
+  done
+  path=("${front[@]}" "${path[@]}")
+}
+__dotfiles_path

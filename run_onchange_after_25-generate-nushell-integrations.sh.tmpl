@@ -1,20 +1,23 @@
 #!/bin/sh
 set -eu
 
-# Re-run when the shell config changes: {{ include "dot_config/nushell/config.nu.tmpl" | sha256sum }}
+# Re-run when the shell or tool config changes:
+# {{ include "dot_config/nushell/config.nu.tmpl" | sha256sum }}
+# {{ include "dot_config/mise/config.toml" | sha256sum }}
 config_dir="$HOME/.config/nushell"
 autoload_dir="$config_dir/vendor/autoload"
 mkdir -p "$config_dir" "$autoload_dir"
 
-if [ -d /opt/homebrew/bin ]; then
-  PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
-elif [ -d /home/linuxbrew/.linuxbrew/bin ]; then
-  PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
-fi
+# Tools come from mise; the shims resolve them without an activated shell.
+PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
 export PATH
 
-command -v starship >/dev/null 2>&1 && starship init nu > "$config_dir/starship.nu"
+# starship embeds its own absolute path, which under mise names a version
+# directory; call it by name so upgrades do not break the prompt.
+command -v starship >/dev/null 2>&1 && starship init nu \
+  | sed 's#\^/[^ ]*/starship #^starship #g' > "$config_dir/starship.nu"
 command -v zoxide >/dev/null 2>&1 && zoxide init nushell > "$config_dir/zoxide.nu"
+command -v carapace >/dev/null 2>&1 && carapace _carapace nushell > "$config_dir/carapace.nu"
 if command -v atuin >/dev/null 2>&1; then
   atuin init nu | awk '
     /name: atuin/ {

@@ -1,0 +1,141 @@
+# Interactive zsh, shared by the MacBook and the Omarchy desktop.
+# Managed by chezmoi: edit ~/.local/share/chezmoi/dot_zshrc.
+
+# mise first: it puts the configured tool versions on PATH, so everything
+# below (tuios included) resolves to the mise-managed binaries.
+if (( $+commands[mise] )); then
+  eval "$(mise activate zsh)"
+fi
+
+# Every top-level terminal opens into tuios. Skipped inside tuios, tmux,
+# herdr, zellij, editors and SSH logins, and when TUIOS_AUTOSTART=0 (kitty
+# splits set that). Detaching or quitting tuios closes the terminal; if tuios
+# fails to start, this shell carries on.
+if [[ -t 0 && -t 1 && ${TUIOS_AUTOSTART:-1} != 0 && $TERM != dumb \
+      && -z ${TUIOS_ENV:-} && -z ${TMUX:-} && -z ${HERDR_ENV:-} && -z ${ZELLIJ:-} \
+      && -z ${SSH_CONNECTION:-} && -z ${INSIDE_EMACS:-} && -z ${NVIM:-} \
+      && ${TERM_PROGRAM:-} != (vscode|zed) \
+      && ${TERMINAL_EMULATOR:-} != JetBrains-JediTerm ]] \
+   && (( $+commands[tuios] )); then
+  tuios attach && exit
+fi
+
+# Vi editing mode.
+bindkey -v
+
+# History, matching what nix-darwin's /etc/zshrc sets on the Mac so the
+# Omarchy desktop (no system zshrc) behaves the same. Atuin owns search.
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=2000
+SAVEHIST=2000
+setopt HIST_IGNORE_DUPS SHARE_HISTORY HIST_FCNTL_LOCK
+
+# Command shortcuts.
+alias python='python3'
+alias py='python3'
+alias emacs='emacs -nw'
+alias oc='opencode'
+alias v='nvim'
+alias vim='nvim'
+alias vi='nvim'
+alias k='kubectl'
+alias lg='lazygit'
+alias weather='curl wttr.in'
+alias ..='cd ..'
+(( $+commands[bat] )) && alias cat='bat'
+(( $+commands[eza] )) && alias ls='eza --icons=auto --color=auto'
+(( $+commands[podman] )) && alias docker='podman'
+
+# Parse newline-delimited JSON into one JSON array, like Nushell's
+# `from ndjson`. Reads stdin or one or more files.
+from() {
+  if [[ ${1:-} != ndjson ]]; then
+    print -u2 -- 'usage: from ndjson [file ...]'
+    return 2
+  fi
+  shift
+
+  if (( ! $+commands[jq] )); then
+    print -u2 -- 'from ndjson: jq is required'
+    return 127
+  fi
+
+  command jq --slurp '.' -- "$@"
+}
+
+# Completion. nix-darwin's /etc/zshrc already runs compinit on the Mac;
+# Arch has no system zshrc that does.
+if (( ! $+functions[compdef] )); then
+  autoload -Uz compinit bashcompinit
+  compinit
+  bashcompinit
+fi
+setopt AUTO_MENU COMPLETE_IN_WORD
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' squeeze-slashes true
+
+# Directory jumping. Define `cd` only after zoxide has created `z`.
+if (( $+commands[zoxide] )); then
+  eval "$(zoxide init zsh)"
+  alias cd='z'
+fi
+
+# External completion engine.
+if (( $+commands[carapace] )); then
+  source <(carapace _carapace zsh)
+fi
+
+# Yazi wrapper: leave the shell in the directory selected on exit.
+y() {
+  local tmp cwd exit_status
+  tmp="$(mktemp -t 'yazi-cwd.XXXXXX')" || return 1
+  command yazi "$@" --cwd-file="$tmp"
+  exit_status=$?
+  cwd="$(<"$tmp")"
+  command rm -f -- "$tmp"
+  if [[ -n $cwd && $cwd != $PWD && -d $cwd ]]; then
+    builtin cd -- "$cwd"
+  fi
+  return $exit_status
+}
+
+# Television supplies smart completion and a history picker. Atuin keeps
+# Ctrl-R; Television history is on Ctrl-X Ctrl-R.
+if (( $+commands[tv] )); then
+  source <(tv init zsh)
+  for __keymap in emacs viins vicmd; do
+    bindkey -M "$__keymap" '^T' tv-smart-autocomplete
+    bindkey -M "$__keymap" '^X^R' tv-shell-history
+  done
+  unset __keymap
+fi
+
+# Load Atuin after Television so its Ctrl-R and Up bindings take precedence.
+if (( $+commands[atuin] )); then
+  eval "$(atuin init zsh --disable-ai)"
+fi
+
+# Starship draws both the left and right prompts from starship.toml.
+if (( $+commands[starship] )); then
+  eval "$(starship init zsh)"
+fi
+
+# Worktrunk shell integration.
+if (( $+commands[wt] )); then
+  eval "$(command wt config shell init zsh)"
+fi
+
+# Bun completions.
+[[ -s $BUN_INSTALL/_bun ]] && source "$BUN_INSTALL/_bun"
+
+# Inline suggestions use history first, then completion results. Syntax
+# highlighting loads last because it must wrap the final ZLE widgets. Both
+# plugins are git checkouts chezmoi keeps in ~/.local/share/zsh/plugins.
+typeset -ga ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+for __plugin in zsh-autosuggestions zsh-syntax-highlighting; do
+  [[ -r $HOME/.local/share/zsh/plugins/$__plugin/$__plugin.zsh ]] \
+    && source "$HOME/.local/share/zsh/plugins/$__plugin/$__plugin.zsh"
+done
+unset __plugin

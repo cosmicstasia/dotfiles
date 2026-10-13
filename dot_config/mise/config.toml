@@ -1,0 +1,98 @@
+# Global toolchain shared by the MacBook and the Omarchy desktop.
+# Native package managers (Homebrew via ~/Brewfile on macOS, pacman on Arch)
+# only provide GUI apps and the system libraries/daemons mise cannot.
+# Change a tool here and `chezmoi apply` runs `mise install` on that machine.
+
+[settings]
+experimental = true
+
+[tools]
+# Languages and runtimes
+node = "lts"
+python = "3.13"
+go = "latest"
+java = "temurin-21"
+bun = "latest"
+deno = "latest"
+uv = "latest"
+gradle = "latest"
+maven = "latest"
+cmake = "latest"
+
+# Shell environment
+atuin = "latest"
+bat = "latest"
+carapace = "latest"
+eza = "latest"
+fd = "latest"
+fzf = "latest"
+jq = "latest"
+ripgrep = "latest"
+starship = "latest"
+television = "latest"
+zoxide = "latest"
+"github:nushell/nushell" = "latest"
+
+# Terminal workspace
+"github:Gaurav-Gosain/tuios" = { version = "latest", matching_regex = "^tuios_" }
+herdr = "latest"
+zellij = "latest"
+"github:joshmedeski/sesh" = "latest"
+yazi = "latest"
+superfile = "latest"
+neovim = "latest"
+helix = "latest"
+micro = "latest"
+fastfetch = "latest"
+
+# Coding agents (omp ships standalone binaries; no bun install needed)
+oh-my-pi = "latest"
+
+# Git and code review
+chezmoi = "latest"
+delta = "latest"
+gh = "latest"
+glab = "latest"
+gitleaks = "latest"
+lazygit = "latest"
+worktrunk = "latest"
+workmux = "latest"
+"pipx:git-filter-repo" = "latest"
+
+# Infrastructure
+awscli = "latest"
+helm = "latest"
+helm-ls = "latest"
+k9s = "latest"
+kubectl = "latest"
+opentofu = "latest"
+terraform = "latest"
+terraformer = "latest"
+talosctl = "latest"
+velero = "latest"
+trivy = "latest"
+"github:coreos/butane" = "latest"
+"pipx:ansible" = { version = "latest", uvx_args = "--with-executables-from ansible-core" }
+
+# Data and HTTP
+duckdb = "latest"
+"github:sosedoff/pgweb" = "latest"
+"pipx:pgcli" = "latest"
+mongosh = "latest"
+htmlq = "latest"
+xh = "latest"
+yq = "latest"
+rclone = "latest"
+yt-dlp = "latest"
+pandoc = "latest"
+glow = "latest"
+just = "latest"
+7zip = "latest"
+
+# Python tooling
+ruff = "latest"
+ty = "latest"
+"npm:pyright" = "latest"
+"pipx:ipython" = "latest"
+"pipx:platformio" = "latest"
+"pipx:hyfetch" = "latest"

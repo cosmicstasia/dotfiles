@@ -2,3 +2,19 @@
 type = "git-repo"
 url = "https://github.com/tmux-plugins/tpm.git"
 refreshPeriod = "168h"
+
+# zsh plugins, sourced by ~/.zshrc. Git checkouts keep both machines on the
+# same versions without Homebrew or pacman.
+[".local/share/zsh/plugins/zsh-autosuggestions"]
+type = "git-repo"
+url = "https://github.com/zsh-users/zsh-autosuggestions.git"
+refreshPeriod = "168h"
+clone.args = ["--depth", "1"]
+pull.args = ["--ff-only"]
+
+[".local/share/zsh/plugins/zsh-syntax-highlighting"]
+type = "git-repo"
+url = "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+refreshPeriod = "168h"
+clone.args = ["--depth", "1"]
+pull.args = ["--ff-only"]

@@ -1,0 +1,4 @@
+# Login shells. /etc/zprofile on macOS runs path_helper, which moves the
+# system directories ahead of the ones ~/.zshenv added; put ours back first.
+# Managed by chezmoi: edit ~/.local/share/chezmoi/dot_zprofile.
+(( $+functions[__dotfiles_path] )) && __dotfiles_path

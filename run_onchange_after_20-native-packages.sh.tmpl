@@ -1,0 +1,59 @@
+#!/bin/sh
+# Native packages: GUI apps and system libraries mise cannot provide.
+# Everything else comes from ~/.config/mise/config.toml.
+set -eu
+
+{{ if eq .chezmoi.os "darwin" -}}
+# Re-run when the Brewfile changes: {{ include "Brewfile.tmpl" | sha256sum }}
+if [ ! -x /opt/homebrew/bin/brew ]; then
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+/opt/homebrew/bin/brew bundle --file="$HOME/Brewfile"
+{{- else if eq .chezmoi.os "linux" }}
+if ! command -v pacman >/dev/null 2>&1; then
+  echo "Only Arch-based systems (Omarchy) are supported on Linux" >&2
+  exit 1
+fi
+
+# Omarchy already ships git, curl, docker and the Nerd Fonts; the rest of the
+# shared CLI tools come from mise.
+sudo pacman -S --needed --noconfirm \
+  base-devel \
+  zsh \
+  kitty \
+  ttf-hack-nerd \
+  tmux \
+  git-lfs \
+  vim \
+  emacs-wayland \
+  wget \
+  whois \
+  tree \
+  pv \
+  7zip \
+  fortune-mod \
+  binutils \
+  binwalk \
+  nmap \
+  picocom \
+  cava \
+  mpv \
+  ffmpeg \
+  ruby \
+  imagemagick \
+  poppler \
+  tesseract \
+  tesseract-data-eng \
+  plantuml \
+  gdal \
+  octave \
+  luarocks \
+  libiodbc \
+  postgresql \
+  postgresql-libs \
+  valkey \
+  podman \
+  qemu-full \
+  scrcpy \
+  jadx
+{{- end }}

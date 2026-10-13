@@ -3,8 +3,9 @@
 -- Add any additional options here
 vim.opt.relativenumber = false
 
-local sh = vim.fn.exepath("sh")
-if sh ~= "" then
-  vim.opt.shell = sh
+local zsh = vim.fn.exepath("zsh")
+if zsh ~= "" then
+  vim.env.SHELL = zsh
+  vim.opt.shell = zsh
   vim.opt.shellcmdflag = "-c"
 end

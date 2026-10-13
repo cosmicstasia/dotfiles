@@ -1,6 +1,7 @@
 source-file ~/.config/tmux/tmux.reset.conf
-set-option -g default-terminal 'screen-256color'
-set-option -g terminal-overrides ',xterm-256color:RGB'
+set-option -g default-terminal 'tmux-256color'
+set-option -as terminal-features ',xterm-ghostty:RGB:clipboard:ccolour:cstyle:extkeys:focus:hyperlinks:osc7:overline:strikethrough'
+set-option -as terminal-features ',xterm-kitty:RGB:clipboard:ccolour:cstyle:extkeys:focus:hyperlinks:osc7:overline:strikethrough'
 set -g allow-passthrough on
 set -g mouse on
 set -s extended-keys on
@@ -14,13 +15,8 @@ set -g history-limit 1000000     # increase history size (from 2,000)
 set -g renumber-windows on       # renumber all windows when any window is closed
 set -g set-clipboard on          # use system clipboard
 set -g status-position top
-{{ if eq .chezmoi.os "darwin" -}}
-set-option -g default-shell '/opt/homebrew/bin/nu'
-set-environment -g SHELL '/opt/homebrew/bin/nu'
-{{ else -}}
-set-option -g default-shell '/home/linuxbrew/.linuxbrew/bin/nu'
-set-environment -g SHELL '/home/linuxbrew/.linuxbrew/bin/nu'
-{{ end -}}
+set-option -g default-shell '/bin/zsh'
+set-environment -g SHELL '/bin/zsh'
 setw -g mode-keys vi
 set -g pane-active-border-style 'fg=magenta,bg=default'
 set -g pane-border-style 'fg=brightblack,bg=default'
@@ -37,7 +33,6 @@ set -g @plugin 'fcsonline/tmux-thumbs'
 set -g @plugin 'sainnhe/tmux-fzf'
 set -g @plugin 'wfxr/tmux-fzf-url'
 set -g @plugin 'omerxx/catppuccin-tmux' # My fork that holds the meetings script bc I'm lazy af
-set -g @plugin 'omerxx/tmux-sessionx'
 set -g @plugin 'omerxx/tmux-floax'
 set -g @floax-width '80%'
 set -g @floax-height '80%'
@@ -45,39 +40,59 @@ set -g @floax-border-color 'magenta'
 set -g @floax-text-color 'blue'
 set -g @floax-bind 'p'
 set -g @floax-change-path 'true'
-set -g @sessionx-bind-zo-new-window 'ctrl-y'
-set -g @sessionx-auto-accept 'off'
-set -g @sessionx-bind 'o'
-set -g @sessionx-window-height '85%'
-set -g @sessionx-window-width '75%'
-set -g @sessionx-zoxide-mode 'on'
-set -g @sessionx-custom-paths-subdirectories 'false'
-set -g @sessionx-filter-current 'false'
 set -g @continuum-restore 'on'
 set -g @resurrect-strategy-nvim 'session'
+# Catppuccin status bar: compact inactive windows, a clear active window,
+# and useful context on the right without turning the bar into a dashboard.
+set -g @catppuccin_flavour "mocha"
 set -g @catppuccin_window_left_separator ""
-set -g @catppuccin_window_right_separator " "
-set -g @catppuccin_window_middle_separator " █"
-set -g @catppuccin_window_number_position "right"
+set -g @catppuccin_window_right_separator " "
+set -g @catppuccin_window_middle_separator " "
+set -g @catppuccin_window_number_position "left"
 set -g @catppuccin_window_default_fill "number"
-set -g @catppuccin_window_default_text "#W"
-set -g @catppuccin_window_current_fill "number"
-set -g @catppuccin_window_current_text "#W#{?window_zoomed_flag,(),}"
-set -g @catppuccin_status_modules_right "directory" # date_time"
+set -g @catppuccin_window_default_text "#W#{?window_activity_flag, 󰖲,}#{?window_bell_flag, 󰂞,}"
+set -g @catppuccin_window_current_fill "all"
+set -g @catppuccin_window_current_text "#W#{?window_zoomed_flag, 󰁌,}"
+
 set -g @catppuccin_status_modules_left "session"
-set -g @catppuccin_status_left_separator  " "
+set -g @catppuccin_status_modules_right "application directory date_time"
+set -g @catppuccin_status_left_separator " "
 set -g @catppuccin_status_right_separator " "
 set -g @catppuccin_status_right_separator_inverse "no"
 set -g @catppuccin_status_fill "icon"
 set -g @catppuccin_status_connect_separator "no"
+
+# Left: session name; its accent turns red while the prefix is active.
+set -g @catppuccin_session_icon ""
+# Right: foreground process, working directory, and a compact clock.
+set -g @catppuccin_application_icon "󰆍"
+set -g @catppuccin_application_color "#89b4fa"
+set -g @catppuccin_application_text "#{pane_current_command}"
+set -g @catppuccin_directory_icon ""
+set -g @catppuccin_directory_color "#cba6f7"
 set -g @catppuccin_directory_text "#{b:pane_current_path}"
+set -g @catppuccin_date_time_icon "󰥔"
+set -g @catppuccin_date_time_color "#f9e2af"
+set -g @catppuccin_date_time_text "%a %d %b · %H:%M"
+
+# Kept available for adding the custom meetings module later.
 {{ if eq .chezmoi.os "darwin" -}}
 set -g @catppuccin_meetings_text "#($HOME/.config/tmux/scripts/cal.sh)"
-{{ end -}}
-set -g @catppuccin_date_time_text "%H:%M"
+{{ end }}
+# Bindings
+bind-key n command-prompt -p "New session name: " "new-session -s '%%'"
+bind-key '$' command-prompt -I '#S' -p "Rename session: " "rename-session '%%'"
 
-# Bindings 
-bind-key n command-prompt -p "New session name:" "new-session -s '%%'"
+# Prefix + o opens the sesh picker in tmux's native floating popup.
+# T was the old duplicate sesh binding; keep only one session switcher.
+unbind-key T
+bind-key o display-popup -E -w 80% -h 70% \
+  -d "#{pane_current_path}" \
+  -T " sesh " \
+  -b rounded \
+  -s "fg=#cdd6f4,bg=#1e1e2e" \
+  -S "fg=#cba6f7,bg=#1e1e2e,bold" \
+  /bin/bash "$HOME/.config/tmux/scripts/sesh-switcher.sh"
 
 # Prefix + - → horizontal split (top/bottom)
 bind - split-window -v -c "#{pane_current_path}"
@@ -90,5 +105,18 @@ bind '"' split-window -v -c "#{pane_current_path}"
 bind % split-window -h -c "#{pane_current_path}"
 bind x kill-window
 bind q kill-pane
-# TPM 
+# TPM
 run '~/.tmux/plugins/tpm/tpm'
+
+# Apply final layout values after the theme plugin has loaded.
+set -g status-interval 5
+set -g status-left-length 40
+set -g status-right-length 120
+set -g status-justify absolute-centre
+set -g status-style "bg=#1e1e2e,fg=#cdd6f4"
+
+# Center a compact prompt area, then left-align its contents so typed text
+# stays immediately after the label instead of being drawn to its left.
+set -g message-style "fg=#89dceb,bg=#313244,fill=#313244,align=centre,width=50%"
+set -g message-command-style "fg=#89dceb,bg=#313244,fill=#313244,align=centre,width=50%"
+set -g message-format '#[#{?#{command_prompt},#{E:message-command-style},#{E:message-style}}]#[align=left]#{message}'

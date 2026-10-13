@@ -3,9 +3,27 @@
 {{- $gitSigningKey := promptStringOnce . "gitSigningKey" "Git SSH signing public key (optional)" -}}
 {{- $gitSigningProgram := promptStringOnce . "gitSigningProgram" "SSH signing program path (optional)" -}}
 {{- $sshAuthSock := promptStringOnce . "sshAuthSock" "SSH agent socket path (optional)" -}}
+{{- $sshAuthorizedKeys := list -}}
+{{- if hasKey . "sshAuthorizedKeys" -}}
+{{-   $sshAuthorizedKeys = get . "sshAuthorizedKeys" -}}
+{{- else -}}
+{{-   $sshAuthorizedKey := promptString "SSH public key allowed to log in to this machine (optional; add more to sshAuthorizedKeys later)" -}}
+{{-   if $sshAuthorizedKey -}}
+{{-     $sshAuthorizedKeys = list $sshAuthorizedKey -}}
+{{-   end -}}
+{{- end -}}
 {{- $obsidianVault := promptStringOnce . "obsidianVault" "Obsidian vault path (optional)" -}}
 {{- $talosConfig := promptStringOnce . "talosConfig" "Talos config path (optional)" -}}
 {{- $herdrWorkspace := promptStringOnce . "herdrWorkspace" "Herdr workspace path" -}}
+{{- $defaultPeerName := "omarchy" -}}
+{{- $defaultPeerAddr := "omarchy.tailb320db.ts.net" -}}
+{{- if ne .chezmoi.os "darwin" -}}
+{{-   $defaultPeerName = "macbook" -}}
+{{-   $defaultPeerAddr = "anastasia@cash-macbook-pro.tailb320db.ts.net" -}}
+{{- end -}}
+{{- $tuiosPeerName := promptStringOnce . "tuiosPeerName" "tuios name for the other machine (empty to skip)" $defaultPeerName -}}
+{{- $tuiosPeerAddr := promptStringOnce . "tuiosPeerAddr" "ssh address of the other machine" $defaultPeerAddr -}}
+{{- $nineRouterApiKey := promptStringOnce . "nineRouterApiKey" "9router API key for omp (optional, stays local)" -}}
 
 [data]
 gitName = {{ $gitName | quote }}
@@ -16,3 +34,7 @@ sshAuthSock = {{ $sshAuthSock | quote }}
 obsidianVault = {{ $obsidianVault | quote }}
 talosConfig = {{ $talosConfig | quote }}
 herdrWorkspace = {{ $herdrWorkspace | quote }}
+tuiosPeerName = {{ $tuiosPeerName | quote }}
+tuiosPeerAddr = {{ $tuiosPeerAddr | quote }}
+nineRouterApiKey = {{ $nineRouterApiKey | quote }}
+sshAuthorizedKeys = [{{ range $i, $key := $sshAuthorizedKeys }}{{ if $i }}, {{ end }}{{ $key | quote }}{{ end }}]

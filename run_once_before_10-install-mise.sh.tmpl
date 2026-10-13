@@ -1,0 +1,16 @@
+#!/bin/sh
+# Install mise, which provides the shared CLI toolchain on both machines.
+set -eu
+
+if command -v mise >/dev/null 2>&1 || [ -x "$HOME/.local/bin/mise" ]; then
+  exit 0
+fi
+
+{{ if eq .chezmoi.os "linux" -}}
+if command -v pacman >/dev/null 2>&1; then
+  sudo pacman -S --needed --noconfirm mise
+  exit 0
+fi
+{{ end -}}
+
+curl -fsSL https://mise.run | sh

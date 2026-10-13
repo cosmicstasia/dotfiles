@@ -1,0 +1,143 @@
+onboarding = false
+
+# Match the Catppuccin Mocha styling used by tmux.
+[theme]
+name = "catppuccin"
+
+auto_switch = false
+[theme.custom]
+accent = "#cba6f7"
+panel_bg = "#1e1e2e"
+sidebar_bg = "#181825"
+active_row_bg = "#313244"
+selection_bg = "#45475a"
+surface0 = "#313244"
+surface1 = "#45475a"
+surface_dim = "#585b70"
+overlay0 = "#6c7086"
+overlay1 = "#7f849c"
+text = "#cdd6f4"
+subtext0 = "#a6adc8"
+mauve = "#cba6f7"
+blue = "#89b4fa"
+teal = "#94e2d5"
+green = "#a6e3a1"
+yellow = "#f9e2af"
+peach = "#fab387"
+red = "#f38ba8"
+
+[terminal]
+default_shell = "/bin/zsh"
+
+[keys]
+# Keep the tmux prefix and mirror the tmux workflow in Herdr.
+prefix = "ctrl+a"
+settings = ""
+detach = "prefix+ctrl+d"
+reload_config = "prefix+R"
+open_notification_target = ""
+workspace_picker = ""
+goto = "prefix+w"
+new_workspace = "prefix+n"
+rename_workspace = "prefix+$"
+new_tab = "prefix+c"
+rename_tab = "prefix+r"
+previous_tab = "prefix+H"
+next_tab = "prefix+L"
+close_tab = "prefix+x"
+clear_pane = "prefix+K"
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
+split_horizontal = "prefix+minus"
+split_vertical = "prefix+v"
+close_pane = "prefix+q"
+zoom = "prefix+z"
+resize_mode = ""
+resize_pane_left = "prefix+comma"
+resize_pane_right = "prefix+."
+resize_pane_up = "prefix+="
+
+[ui]
+accent = "#cba6f7"
+tab_bar_position = "top"
+hide_tab_bar_when_single_tab = false
+pane_borders = "auto"
+pane_outer_borders = false
+pane_gaps = false
+pane_scrollbars = false
+prompt_new_tab_name = false
+prompt_new_workspace_name = true
+tab_bar_right = [
+  { type = "command", command = "printf ' %s' \"${PWD##*/}\"", interval_seconds = 5, timeout_seconds = 2 },
+  { type = "datetime", format = "󰥔 %a %d %b · %H:%M" },
+]
+tab_bar_right_separator = "  "
+
+[experimental]
+kitty_graphics = true
+
+# tmux-compatible aliases that need a second binding for the same action.
+[[keys.command]]
+key = "prefix+ctrl+c"
+type = "shell"
+command = "herdr tab create --workspace \"$HERDR_WORKSPACE_ID\" --cwd \"$HOME\" --focus"
+description = "open a new tab in home"
+
+[[keys.command]]
+key = "prefix+s"
+type = "shell"
+command = "herdr pane split --current --direction down --cwd \"$PWD\" --focus"
+description = "split pane top and bottom"
+
+[[keys.command]]
+key = "prefix+\""
+type = "shell"
+command = "herdr pane split --current --direction down --cwd \"$PWD\" --focus"
+description = "split pane top and bottom"
+
+[[keys.command]]
+key = "prefix+|"
+type = "shell"
+command = "herdr pane split --current --direction right --cwd \"$PWD\" --focus"
+description = "split pane side by side"
+
+[[keys.command]]
+key = "prefix+%"
+type = "shell"
+command = "herdr pane split --current --direction right --cwd \"$PWD\" --focus"
+description = "split pane side by side"
+
+# Floating fuzzy picker for Herdr workspaces (the tmux-session equivalent).
+[[keys.command]]
+key = "prefix+o"
+type = "popup"
+command = "{{ .chezmoi.homeDir }}/.config/herdr/herdr-sesh.sh"
+width = "80%"
+height = "70%"
+description = "search and switch workspaces"
+
+# Replace tmux-floax with Herdr's native floating terminal.
+[[keys.command]]
+key = "prefix+p"
+type = "popup"
+command = "/bin/zsh"
+width = "80%"
+height = "80%"
+description = "open floating terminal"
+
+[[keys.command]]  # open in a split pane
+key = "prefix+f"
+type = "plugin_action"
+command = "ray.file-explorer.open"
+description = "open file explorer"
+
+[[keys.command]]  # open in a new tab
+key = "prefix+F"
+type = "plugin_action"
+command = "ray.file-explorer.open-tab"
+description = "open file explorer in a new tab"
+
+[ui.toast]
+delivery = "herdr"

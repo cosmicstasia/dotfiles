@@ -18,6 +18,23 @@ README.md
 .config/emacs/recentf.eld
 .config/emacs/tramp
 
+# Nushell integrations generated per machine by
+# run_onchange_after_25-generate-nushell-integrations.sh; they embed
+# machine-specific binary paths, so they are never shared.
+.config/nushell/atuin.nu
+.config/nushell/carapace.nu
+.config/nushell/mise.nu
+.config/nushell/starship.nu
+.config/nushell/zoxide.nu
+.config/nushell/vendor/autoload/tv.nu
+
+# tuios backups and runtime state
+.config/tuios/*.bak*
+
 {{ if ne .chezmoi.os "darwin" }}
-Library/Application Support/nushell
+Brewfile
+Library
+{{ end }}
+{{ if ne .chezmoi.os "linux" }}
+.config/xdg-terminals.list
 {{ end }}

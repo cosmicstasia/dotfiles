@@ -5,6 +5,8 @@ $env.config.show_banner = false
 overlay use starship.nu
 overlay use zoxide.nu
 source atuin.nu
+source ~/.config/nushell/carapace.nu
+source ~/.config/nushell/yazi.nu
 
 use ($nu.default-config-dir | path join "mise.nu")
 
@@ -31,15 +33,11 @@ alias py = python3
 alias ".." = cd ..
 alias docker = podman
 
-let brew_prefix = if $nu.os-info.name == "macos" {
-    "/opt/homebrew"
-} else {
-    "/home/linuxbrew/.linuxbrew"
-}
-
+# mise (mise.nu above) provides the toolchain and JAVA_HOME; Homebrew on
+# macOS only holds casks and the few formulae mise cannot install.
 let extra_paths = [
-    ($brew_prefix | path join "bin")
-    ($brew_prefix | path join "sbin")
+    "/opt/homebrew/bin"
+    "/opt/homebrew/sbin"
     $"($env.HOME)/.cargo/bin"
     $"($env.HOME)/.bun/bin"
     $"($env.HOME)/.local/bin"
@@ -47,50 +45,6 @@ let extra_paths = [
 ]
 $env.PATH = ($env.PATH | prepend ($extra_paths | where {|path| $path | path exists }) | uniq)
 
-if (which brew | is-not-empty) {
-    let java_prefix_result = (^brew --prefix openjdk@21 | complete)
-    if $java_prefix_result.exit_code == 0 {
-        let java_prefix = ($java_prefix_result.stdout | str trim)
-        let java_home = ([
-            ($java_prefix | path join "libexec/openjdk.jdk/Contents/Home")
-            $java_prefix
-        ] | where {|path| $path | path join "bin/java" | path exists } | get -o 0)
-
-        if $java_home != null {
-            $env.JAVA_HOME = $java_home
-            $env.PATH = ($env.PATH | prepend ($java_home | path join "bin") | uniq)
-        }
-    }
-}
-
-if (which carapace | is-not-empty) {
-    let carapace_completer = {|spans: list<string>|
-        CARAPACE_LENIENT=1 carapace $spans.0 nushell ...$spans | from json
-    }
-
-    let external_completer = {|spans: list<string>|
-        let expanded_alias = (
-          scope aliases
-          | where name == $spans.0
-          | get -o 0.expansion
-        )
-        let resolved_spans = if $expanded_alias != null {
-          $spans | skip 1 | prepend ($expanded_alias | split row " " | get 0)
-        } else {
-          $spans
-        }
-        do $carapace_completer $resolved_spans
-    }
-
-    $env.config = ($env.config | merge {
-        completions: {
-            external: {
-                enable: true
-                completer: $external_completer
-            }
-        }
-    })
-}
 
 # Set Edit Mode to vi 
 $env.config.edit_mode = 'vi'

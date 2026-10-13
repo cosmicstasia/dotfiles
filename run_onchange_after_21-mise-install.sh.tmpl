@@ -1,0 +1,8 @@
+#!/bin/sh
+# Install the shared toolchain. Re-run when the mise config changes:
+# {{ include "dot_config/mise/config.toml" | sha256sum }}
+set -eu
+
+mise=$(command -v mise || echo "$HOME/.local/bin/mise")
+"$mise" install --yes
+"$mise" reshim

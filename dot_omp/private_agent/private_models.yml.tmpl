@@ -1,0 +1,13 @@
+{{- /* The key stays in local chezmoi data; this repository is public. */ -}}
+{{- $key := get . "nineRouterApiKey" | default "" -}}
+{{- if $key -}}
+providers:
+  9router:
+    baseUrl: http://127.0.0.1:20128/v1
+    apiKey: {{ $key }}
+    api: openai-completions
+    authHeader: true
+    disableStrictTools: true
+    discovery:
+      type: proxy
+{{ end -}}

@@ -1,0 +1,12 @@
+#!/bin/sh
+# Wire coding-agent harnesses to tuios so panes report agent state. tuios owns
+# the files it writes (e.g. ~/.omp/agent/extensions/tuios-omp-agent-state.ts)
+# and keeps them current; re-run when the tuios version in mise changes:
+# {{ include "dot_config/mise/config.toml" | sha256sum }}
+set -eu
+
+PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+export PATH
+
+command -v tuios >/dev/null 2>&1 || exit 0
+tuios integration install omp

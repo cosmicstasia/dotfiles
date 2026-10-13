@@ -1,9 +1,8 @@
 let extra_paths = [
     ($env.HOME | path join ".local" "bin")
+    ($env.HOME | path join ".local" "share" "mise" "shims")
     ($env.HOME | path join ".cargo" "bin")
     "/usr/local/bin"
-    "/opt/homebrew/bin"
-    "/home/linuxbrew/.linuxbrew/bin"
 ]
 
 $env.PATH = (

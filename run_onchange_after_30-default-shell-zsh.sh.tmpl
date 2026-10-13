@@ -1,0 +1,22 @@
+#!/bin/sh
+# Make zsh the login shell, so kitty, tmux, herdr and tuios all start it.
+set -eu
+
+user=$(id -un)
+{{ if eq .chezmoi.os "darwin" -}}
+zsh_path=/bin/zsh
+current=$(dscl . -read "/Users/$user" UserShell | awk '{ print $2 }')
+{{- else }}
+zsh_path=/usr/bin/zsh
+current=$(getent passwd "$user" | cut -d: -f7)
+{{- end }}
+
+if [ "$current" = "$zsh_path" ]; then
+  exit 0
+fi
+
+if ! grep -Fxq "$zsh_path" /etc/shells; then
+  printf '%s\n' "$zsh_path" | sudo tee -a /etc/shells >/dev/null
+fi
+
+chsh -s "$zsh_path"

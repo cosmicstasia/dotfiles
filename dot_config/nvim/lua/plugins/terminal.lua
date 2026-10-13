@@ -1,11 +1,11 @@
-local nu = require("config.executable").find("nu")
+local zsh = require("config.executable").find("zsh")
 
 return {
   {
     "folke/snacks.nvim",
     opts = {
       terminal = {
-        shell = nu,
+        shell = zsh,
       },
     },
   },

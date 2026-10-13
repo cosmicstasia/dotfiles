@@ -1,0 +1,23 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- /*
+  Adds the public keys in the sshAuthorizedKeys chezmoi value to
+  ~/.ssh/authorized_keys. Keys already there (pairing keys, keys added by
+  hand) are kept; a key counts as present when its type and body match,
+  whatever its comment.
+*/ -}}
+{{- $out := trimSuffix "\n" .chezmoi.stdin -}}
+{{- range $key := get . "sshAuthorizedKeys" | default list -}}
+{{-   $key = trim $key -}}
+{{-   $parts := splitList " " $key -}}
+{{-   if ge (len $parts) 2 -}}
+{{-     $id := printf "%s %s" (index $parts 0) (index $parts 1) -}}
+{{-     if not (contains $id $out) -}}
+{{-       if $out -}}
+{{-         $out = printf "%s\n%s" $out $key -}}
+{{-       else -}}
+{{-         $out = $key -}}
+{{-       end -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{- if $out }}{{ $out }}{{ "\n" }}{{ end -}}
