@@ -1,0 +1,5 @@
+{{- $gitEmail := get . "gitEmail" | default "" -}}
+{{- $gitSigningKey := get . "gitSigningKey" | default "" -}}
+{{- if and $gitEmail $gitSigningKey -}}
+{{ $gitEmail }} {{ $gitSigningKey }}
+{{ end -}}

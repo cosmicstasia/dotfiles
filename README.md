@@ -61,6 +61,19 @@ so the peer needs sshd (Remote Login on macOS) and a running tuios daemon.
 value (a list; `chezmoi init` asks for the first one). Keys already in the file
 are kept, so pairing keys and keys added by hand survive `chezmoi apply`.
 
+## Git signing and SSH agent
+
+Commits are SSH-signed through 1Password. `chezmoi init` defaults
+`gitSigningKey` (public key of the `Git Signing Key` item),
+`gitSigningProgram` (`op-ssh-sign`) and `sshAuthSock` (the 1Password agent
+socket) per OS; accept them or clear `gitSigningKey` to turn signing off.
+`~/.gitconfig` then sets `gpg.format = ssh` and `commit.gpgsign = true`, and
+`~/.config/git/allowed_signers` lets `git verify-commit` trust the key.
+
+`~/.zshenv` exports `SSH_AUTH_SOCK` from `sshAuthSock`. 1Password only serves
+the Personal vault by default; list other vaults in
+`~/.config/1Password/ssh/agent.toml` (per account, not managed here).
+
 ## omp
 
 omp itself comes from mise (`oh-my-pi`, the standalone release binary), like
