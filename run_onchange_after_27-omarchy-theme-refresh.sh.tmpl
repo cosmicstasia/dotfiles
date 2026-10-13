@@ -7,5 +7,14 @@
 set -eu
 
 command -v omarchy-theme-refresh >/dev/null 2>&1 || exit 0
+# A login session exports OMARCHY_PATH; `chezmoi apply` over SSH may not.
+if [ -z "${OMARCHY_PATH:-}" ]; then
+  if [ -d /usr/share/omarchy ]; then
+    OMARCHY_PATH=/usr/share/omarchy
+  else
+    OMARCHY_PATH="$HOME/.local/share/omarchy"
+  fi
+  export OMARCHY_PATH
+fi
 omarchy-theme-refresh || echo "omarchy-theme-refresh failed; run it from the desktop session" >&2
 {{ end -}}
