@@ -39,23 +39,33 @@ Omarchy theme directory (`~/.local/state/omarchy/current/theme` on Omarchy 4).
   cannot provide: system libraries, daemons and compiled toolchains.
 - **pacman** (Omarchy) installs the same native set; see
   `run_onchange_after_20-native-packages.sh.tmpl`.
-- zsh-autosuggestions and zsh-syntax-highlighting are git checkouts in
+- zsh-autosuggestions and fast-syntax-highlighting are git checkouts in
   `~/.local/share/zsh/plugins` (see `.chezmoiexternal.toml`).
 
 ## Working across both machines
 
-Each machine's tuios lists the other in `~/.config/tuios/config.d/hosts.toml`,
-rendered from `tuiosPeerName`/`tuiosPeerAddr` in chezmoi's data. Sessions on
-the other machine show in the tuios sidebar, or open one directly:
+Each machine knows the other under `peerName`, reached at `peerAddr` (chezmoi
+data; `chezmoi init` asks for both).
 
-```sh
-tuios attach --host omarchy        # from the MacBook
-tuios attach --host macbook        # from the Omarchy desktop
-```
+- **tuios** lists it in `~/.config/tuios/config.d/hosts.toml`. Its sessions show
+  in the tuios sidebar, or open one directly:
 
-tuios asks before it trusts a new host: run `tuios config apply` from a
-terminal outside tuios after the first `chezmoi apply`. The link goes over SSH,
-so the peer needs sshd (Remote Login on macOS) and a running tuios daemon.
+  ```sh
+  tuios attach --host omarchy        # from the MacBook
+  tuios attach --host macbook        # from the Omarchy desktop
+  ```
+
+  tuios asks before it trusts a new host: run `tuios config apply` from a
+  terminal outside tuios after the first `chezmoi apply`, and keep a tuios
+  daemon running on the peer.
+- **herdr** saves it as an SSH machine (`run_after_28-herdr-peer-machine.sh`
+  runs `herdr machine add` when it is missing, which also starts the peer's
+  herdr server). Its workspaces and agents show in the herdr sidebar; `prefix+w`
+  switches across both machines, and `herdr --machine omarchy agent list` works
+  from the CLI. An unreachable peer is retried on the next `chezmoi apply`.
+
+Both links go over SSH, so each machine needs sshd (Remote Login on macOS) and
+a key the other accepts without a prompt.
 
 `~/.ssh/authorized_keys` gets every key in the `sshAuthorizedKeys` chezmoi
 value (a list; `chezmoi init` asks for the first one). Keys already in the file

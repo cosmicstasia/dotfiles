@@ -29,8 +29,8 @@
 {{-   $defaultPeerName = "macbook" -}}
 {{-   $defaultPeerAddr = "anastasia@cash-macbook-pro.tailb320db.ts.net" -}}
 {{- end -}}
-{{- $tuiosPeerName := promptStringOnce . "tuiosPeerName" "tuios name for the other machine (empty to skip)" $defaultPeerName -}}
-{{- $tuiosPeerAddr := promptStringOnce . "tuiosPeerAddr" "ssh address of the other machine" $defaultPeerAddr -}}
+{{- $peerName := promptStringOnce . "peerName" "name for the other machine in tuios and herdr (empty to skip)" $defaultPeerName -}}
+{{- $peerAddr := promptStringOnce . "peerAddr" "ssh address of the other machine" $defaultPeerAddr -}}
 {{- $nineRouterApiKey := promptStringOnce . "nineRouterApiKey" "9router API key for omp (optional, stays local)" -}}
 
 [data]
@@ -42,7 +42,7 @@ sshAuthSock = {{ $sshAuthSock | quote }}
 obsidianVault = {{ $obsidianVault | quote }}
 talosConfig = {{ $talosConfig | quote }}
 herdrWorkspace = {{ $herdrWorkspace | quote }}
-tuiosPeerName = {{ $tuiosPeerName | quote }}
-tuiosPeerAddr = {{ $tuiosPeerAddr | quote }}
+peerName = {{ $peerName | quote }}
+peerAddr = {{ $peerAddr | quote }}
 nineRouterApiKey = {{ $nineRouterApiKey | quote }}
 sshAuthorizedKeys = [{{ range $i, $key := $sshAuthorizedKeys }}{{ if $i }}, {{ end }}{{ $key | quote }}{{ end }}]

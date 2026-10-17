@@ -1,0 +1,33 @@
+{{- $peerName := get . "peerName" | default "" -}}
+{{- $peerAddr := get . "peerAddr" | default "" -}}
+{{- if and $peerName $peerAddr -}}
+#!/bin/sh
+# Save the other machine of the MacBook/Omarchy pair in herdr, so its
+# workspaces and agents show in the sidebar under "{{ $peerName }}", as tuios
+# lists it under [hosts]. Runs on every apply; it only reads herdr's machine
+# list unless the peer is missing, and then lets `herdr machine add` start the
+# peer's herdr server and save the profile.
+set -eu
+
+PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+export PATH
+command -v herdr >/dev/null 2>&1 || exit 0
+command -v jq >/dev/null 2>&1 || exit 0
+
+name={{ $peerName | quote }}
+addr={{ $peerAddr | quote }}
+
+if herdr machine list --json 2>/dev/null \
+  | jq -e --arg t "$addr" 'any(.[]; .target == $t)' >/dev/null; then
+  exit 0
+fi
+
+# macOS has no timeout(1): a bounded, prompt-free ssh probe keeps an asleep
+# or locked peer from stalling chezmoi apply.
+if ssh -o BatchMode=yes -o ConnectTimeout=8 "$addr" true </dev/null 2>/dev/null \
+  && herdr machine add "$addr" --label "$name" --remote-session default </dev/null; then
+  exit 0
+fi
+echo "herdr: could not save $name ($addr) yet; chezmoi apply retries it." >&2
+echo "  Check that 'ssh $addr' works without a prompt, then re-run chezmoi apply." >&2
+{{ end -}}
