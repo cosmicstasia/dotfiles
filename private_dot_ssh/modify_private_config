@@ -1,0 +1,31 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- /*
+  Forwards the SSH agent to the other machine of the pair (peerAddr), so
+  signing and SSH in tuios/herdr sessions there use this machine's
+  1Password, and its approval prompts show up here. herdr only passes on an
+  agent the ssh connection forwards; it never enables forwarding itself.
+  Only the marked block is managed; the rest of ~/.ssh/config is kept.
+*/ -}}
+{{- $begin := "# BEGIN chezmoi peer (managed: edit private_dot_ssh/modify_private_config)" -}}
+{{- $end := "# END chezmoi peer" -}}
+{{- $rest := regexReplaceAll "(?s)# BEGIN chezmoi peer[^\n]*\n.*?# END chezmoi peer\n*" .chezmoi.stdin "" -}}
+{{- $peerName := get . "peerName" | default "" -}}
+{{- $peerAddr := get . "peerAddr" | default "" -}}
+{{- if $peerAddr -}}
+{{- $host := regexReplaceAll "^.*@" $peerAddr "" -}}
+{{- $user := "" -}}
+{{- if contains "@" $peerAddr }}{{ $user = regexReplaceAll "@.*$" $peerAddr "" }}{{ end -}}
+{{ $begin }}
+Host {{ if and $peerName (ne $peerName $host) }}{{ $peerName }} {{ end }}{{ $host }}
+  HostName {{ $host }}
+{{- if $user }}
+  User {{ $user }}
+{{- end }}
+  ForwardAgent yes
+{{ $end }}
+{{ if $rest }}
+{{ $rest }}
+{{- end }}
+{{- else -}}
+{{ $rest }}
+{{- end -}}

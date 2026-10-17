@@ -122,14 +122,13 @@ type = "shell"
 command = "herdr pane split --current --direction right --cwd \"$PWD\" --focus"
 description = "split pane side by side"
 
-# Floating fuzzy picker for Herdr workspaces (the tmux-session equivalent).
+# herdr-bar command bar: fuzzy-jump to any tab, pane, or agent. The plugin is
+# installed by run_onchange_after_29-herdr-plugins.sh.
 [[keys.command]]
 key = "prefix+o"
-type = "popup"
-command = "{{ .chezmoi.homeDir }}/.config/herdr/herdr-sesh.sh"
-width = "80%"
-height = "70%"
-description = "search and switch workspaces"
+type = "plugin_action"
+command = "herdr-bar.open"
+description = "command bar"
 
 # Replace tmux-floax with Herdr's native floating terminal.
 [[keys.command]]

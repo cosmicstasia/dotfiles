@@ -1,0 +1,19 @@
+#!/bin/sh
+# Install the herdr plugins that config.toml binds keys to. herdr keeps the
+# checkouts and plugins.json as per-machine state, so chezmoi tracks only the
+# plugin list here; `herdr plugin update` moves them forward.
+set -eu
+
+PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+export PATH
+command -v herdr >/dev/null 2>&1 || exit 0
+
+installed=$(herdr plugin list 2>/dev/null || true)
+
+for repo in jeffarese/herdr-bar; do
+  id=${repo##*/}
+  case "$installed" in
+    *"$id [github:$repo@"*) continue ;;
+  esac
+  herdr plugin install "$repo" --yes </dev/null
+done

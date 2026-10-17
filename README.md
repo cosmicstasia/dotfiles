@@ -82,11 +82,14 @@ socket) per OS; accept them or clear `gitSigningKey` to turn signing off.
 
 Which agent is used depends on how you're connected. A remote SSH session
 (`ssh -A`) keeps the forwarded agent it inherits, so signing and SSH use the
-client machine's 1Password. Otherwise `~/.zshenv` and nushell set
+client machine's 1Password (`~/.ssh/config` sets `ForwardAgent yes` for the
+peer machine in a marked block; other hosts in that file stay as they are).
+Otherwise `~/.zshenv` and nushell set
 `SSH_AUTH_SOCK` from `sshAuthSock`, this machine's 1Password agent. tuios panes
 re-resolve it before every prompt (`tuios ssh-agent-path`): the forwarded agent
 while a remote client uses the session, the local agent once that socket is
-gone. Git signs through `~/.local/bin/git-ssh-sign`, which uses the agent in
+gone. herdr panes do the same with herdr's stable `herdr.sock.agent` address.
+Git signs through `~/.local/bin/git-ssh-sign`, which uses the agent in
 `SSH_AUTH_SOCK` when it holds the signing key and otherwise falls back to
 `gitSigningProgram`.
 

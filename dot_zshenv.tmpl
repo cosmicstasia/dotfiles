@@ -14,7 +14,7 @@ export TALOSCONFIG={{ $talosConfig | quote }}
 {{ end -}}
 # This machine's own agent. A remote session keeps the forwarded agent it
 # inherits; everything else uses this one. ~/.zshrc falls back to it when a
-# tuios pane's forwarded agent goes away.
+# tuios or herdr pane's forwarded agent goes away.
 {{ if $sshAuthSock -}}
 __dotfiles_local_agent={{ $sshAuthSock | quote }}
 {{ else -}}
