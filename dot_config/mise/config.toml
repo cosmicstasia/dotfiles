@@ -8,7 +8,7 @@ experimental = true
 
 [tools]
 # Languages and runtimes
-node = "lts"
+node = "26.8.1"
 python = "3.13"
 go = "latest"
 java = "temurin-21"
@@ -96,3 +96,4 @@ ty = "latest"
 "pipx:ipython" = "latest"
 "pipx:platformio" = "latest"
 "pipx:hyfetch" = "latest"
+pi = "latest"

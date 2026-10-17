@@ -8,5 +8,10 @@ use = "wylie102/duckdb"
 rev = "3f8c863"
 hash = "87b9233a74325e95011670ed20bbd0d4"
 
+[[plugin.deps]]
+use = "terrakok/split-tabs"
+rev = "d0531f4"
+hash = "4298f0a23f6109a92334eef06fc7ffb9"
+
 [flavor]
 deps = []
