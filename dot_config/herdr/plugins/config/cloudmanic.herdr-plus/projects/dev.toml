@@ -1,0 +1,20 @@
+# herdr-plus project template (prefix+up). Works for any repo: it asks for the
+# directory when opened, and every tab starts there.
+name = "dev"
+description = "omp agent, scratchpad, lazygit and k9s in any repo"
+working_dir = "{prompt}"
+
+[[tabs]]
+name = "omp"
+command = "omp"
+
+[[tabs]]
+name = "scratchpad" # no command: an empty shell
+
+[[tabs]]
+name = "lazygit"
+command = "lazygit"
+
+[[tabs]]
+name = "k9s"
+command = "k9s"
