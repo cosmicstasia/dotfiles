@@ -104,6 +104,14 @@ public repository. tuios writes its own omp extension
 (`tuios integration install omp`), so a script re-runs that instead of
 tracking the file. Sessions, history and model caches stay per machine.
 
+Agent skills in `~/.agents/skills`, `~/.claude/skills`, `~/.codex/skills` and
+`~/.pi/agent/skills` are tracked with their supporting scripts and references.
+Home-directory paths in skills are templated for each machine. Add or update a
+skill with `chezmoi add <skill-directory>` before committing; apply on the other
+machine to install it. Codex's `.system` skills, Claude's `synced` cache and
+installer metadata are not tracked. Omarchy's `omarchy` and `diagnose-crash`
+symlinks stay local to Linux and are not installed on the Mac.
+
 ## Bootstrap
 
 ```sh
