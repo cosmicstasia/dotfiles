@@ -32,6 +32,8 @@ Host {{ $git.host }}
   IdentityFile ~/.ssh/id_ed25519
 {{- end }}
 # END chezmoi
-{{ if $rest }}
+{{- $rest = trim $rest }}
+{{- if $rest }}
+
 {{ $rest }}
-{{- end }}
+{{ end -}}
