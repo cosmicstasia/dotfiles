@@ -1,5 +1,9 @@
 {{- $gitEmail := get . "gitEmail" | default "" -}}
-{{- $gitSigningKey := get . "gitSigningKey" | default "" -}}
-{{- if and $gitEmail $gitSigningKey -}}
-{{ $gitEmail }} {{ $gitSigningKey }}
+{{- if $gitEmail -}}
+{{-   range $key := .git.signerKeys | default list -}}
+{{-     $parts := splitList " " (trim $key) -}}
+{{-     if ge (len $parts) 2 -}}
+{{ $gitEmail }} {{ index $parts 0 }} {{ index $parts 1 }}
 {{ end -}}
+{{-   end -}}
+{{- end -}}

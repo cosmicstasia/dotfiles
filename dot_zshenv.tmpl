@@ -1,4 +1,3 @@
-{{- $sshAuthSock := get . "sshAuthSock" | default "" -}}
 {{- $talosConfig := get . "talosConfig" | default "" -}}
 # Environment for every zsh: login, interactive, scripts, `ssh host cmd`,
 # and the panes tuios and herdr spawn. Keep this file fast and silent.
@@ -12,21 +11,6 @@ export BUN_INSTALL="$HOME/.bun"
 {{ if $talosConfig -}}
 export TALOSCONFIG={{ $talosConfig | quote }}
 {{ end -}}
-# This machine's own agent. A remote session keeps the forwarded agent it
-# inherits; everything else uses this one. ~/.zshrc falls back to it when a
-# tuios or herdr pane's forwarded agent goes away.
-{{ if $sshAuthSock -}}
-__dotfiles_local_agent={{ $sshAuthSock | quote }}
-{{ else -}}
-__dotfiles_local_agent="${XDG_RUNTIME_DIR:-/nonexistent}/ssh-agent.socket"
-{{ end -}}
-if [[ -z ${SSH_AUTH_SOCK:-} ]]; then
-{{ if $sshAuthSock -}}
-  export SSH_AUTH_SOCK=$__dotfiles_local_agent
-{{ else -}}
-  [[ -S $__dotfiles_local_agent ]] && export SSH_AUTH_SOCK=$__dotfiles_local_agent
-{{ end -}}
-fi
 # User directories go in front of the system PATH. mise shims make the
 # mise-managed tools visible to non-interactive shells too (scripts, editors,
 # the ssh link `tuios hosts` opens to the other machine); interactive shells

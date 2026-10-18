@@ -3,3 +3,5 @@
 # Replaced by fast-syntax-highlighting (see .chezmoiexternal.toml).
 .local/share/zsh/plugins/zsh-syntax-highlighting
 
+# Git signs with ~/.ssh/id_ed25519 directly; no wrapper around the agent.
+.local/bin/git-ssh-sign

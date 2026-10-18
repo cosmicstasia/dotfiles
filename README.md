@@ -71,30 +71,26 @@ a key the other accepts without a prompt.
 value (a list; `chezmoi init` asks for the first one). Keys already in the file
 are kept, so pairing keys and keys added by hand survive `chezmoi apply`.
 
-## Git signing and SSH agent
+## Git signing and SSH keys
 
-Commits are SSH-signed through 1Password. `chezmoi init` defaults
-`gitSigningKey` (public key of the `Git Signing Key` item),
-`gitSigningProgram` (`op-ssh-sign`) and `sshAuthSock` (the 1Password agent
-socket) per OS; accept them or clear `gitSigningKey` to turn signing off.
-`~/.gitconfig` then sets `gpg.format = ssh` and `commit.gpgsign = true`, and
-`~/.config/git/allowed_signers` lets `git verify-commit` trust the key.
+Each machine has its own `~/.ssh/id_ed25519`, and git and SSH read it straight
+from disk: no SSH agent, agent forwarding or password manager. It signs
+commits and tags (`~/.gitconfig` sets `gpg.format = ssh`,
+`user.signingkey = ~/.ssh/id_ed25519` and `commit.gpgsign = true`) and logs in
+to the git hosts and the other machine; `~/.ssh/config` gets a managed block
+for those hosts and leaves the rest of the file alone.
 
-Which agent is used depends on how you're connected. A remote SSH session
-(`ssh -A`) keeps the forwarded agent it inherits, so signing and SSH use the
-client machine's 1Password (`~/.ssh/config` sets `ForwardAgent yes` for the
-peer machine in a marked block; other hosts in that file stay as they are).
-Otherwise `~/.zshenv` and nushell set
-`SSH_AUTH_SOCK` from `sshAuthSock`, this machine's 1Password agent. tuios panes
-re-resolve it before every prompt (`tuios ssh-agent-path`): the forwarded agent
-while a remote client uses the session, the local agent once that socket is
-gone. herdr panes do the same with herdr's stable `herdr.sock.agent` address.
-Git signs through `~/.local/bin/git-ssh-sign`, which uses the agent in
-`SSH_AUTH_SOCK` when it holds the signing key and otherwise falls back to
-`gitSigningProgram`.
+`.chezmoidata/git.toml` lists the git hosts (`gitHosts`) and the public keys
+trusted to sign (`git.signerKeys`), which `~/.config/git/allowed_signers` is
+built from so `git verify-commit` works for commits from either machine.
 
-1Password only serves the Personal vault by default; list other vaults in
-`~/.config/1Password/ssh/agent.toml` (per account, not managed here).
+On a new machine:
+
+1. `ssh-keygen -t ed25519 -C "$USER@$(hostname -s)"` (a passphrase is
+   optional; with one, git asks for it when signing).
+2. Add `~/.ssh/id_ed25519.pub` to `git.signerKeys`, to `sshAuthorizedKeys` on
+   the other machine, and to your account on each git host, marked for
+   signing as well as authentication where the forge offers it.
 
 ## omp
 

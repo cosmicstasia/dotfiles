@@ -1,13 +1,12 @@
 {{- $gitName := get . "gitName" | default "" -}}
 {{- $gitEmail := get . "gitEmail" | default "" -}}
-{{- $gitSigningKey := get . "gitSigningKey" | default "" -}}
-{{- $gitSigningProgram := get . "gitSigningProgram" | default "" -}}
+{{- $gitSigningKeyFile := get . "gitSigningKeyFile" | default "" -}}
 {{- if or $gitName $gitEmail }}
 [user]
 	name = {{ $gitName }}
 	email = {{ $gitEmail }}
-{{- if $gitSigningKey }}
-	signingkey = {{ $gitSigningKey }}
+{{- if $gitSigningKeyFile }}
+	signingkey = {{ $gitSigningKeyFile }}
 {{- end }}
 {{- end }}
 [init]
@@ -17,14 +16,14 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-{{- if and $gitSigningKey $gitSigningProgram }}
+{{- if $gitSigningKeyFile }}
 [gpg]
 	format = ssh
 [gpg "ssh"]
-	# Signs through the agent in SSH_AUTH_SOCK (forwarded over SSH, 1Password
-	# locally); falls back to gitSigningProgram. See ~/.local/bin/git-ssh-sign.
-	program = {{ printf "%s/.local/bin/git-ssh-sign" .chezmoi.homeDir | quote }}
+	# Signs with the key file in user.signingkey; ssh-keygen reads it directly.
 	allowedSignersFile = ~/.config/git/allowed_signers
 [commit]
+	gpgsign = true
+[tag]
 	gpgsign = true
 {{- end }}

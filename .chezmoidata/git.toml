@@ -1,0 +1,21 @@
+# Git hosts reached over SSH with this machine's ~/.ssh/id_ed25519
+# (see private_dot_ssh/modify_private_config). Each machine's public key must
+# be added to your account on every host: as an authentication key, and as a
+# signing key where the forge has that option, so commits show verified.
+[[gitHosts]]
+host = "ssh.git.brookmimir.com" # self-hosted Forgejo
+port = 2222
+
+[[gitHosts]]
+host = "github.com"
+
+# Public keys trusted to sign commits as gitEmail, written to
+# ~/.config/git/allowed_signers. Old keys stay listed so the commits they
+# signed still verify.
+[git]
+signerKeys = [
+  # 1Password "Git Signing Key", used before the per-machine keys.
+  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII7NtXra0OpPLfysYZhtvKbTrS6mUnJya1vnI5LXl7yl",
+  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJMyohazDDiCMZxIfTuHIU4m6FQDDt4DHO86Wc1QenvX anastasia@omarchy",
+  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDK1v4ijN1zWAgPFFAyPXVDTGjtw3ra2dRLTFGrnHKkX anastasia@macbook",
+]

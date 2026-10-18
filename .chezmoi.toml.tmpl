@@ -1,16 +1,11 @@
 {{- $gitName := promptStringOnce . "gitName" "Git name" -}}
 {{- $gitEmail := promptStringOnce . "gitEmail" "Git email" -}}
-{{- /* 1Password SSH agent defaults. The signing key is a public key, safe to commit. */ -}}
-{{- $defaultSigningKey := "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII7NtXra0OpPLfysYZhtvKbTrS6mUnJya1vnI5LXl7yl" -}}
-{{- $defaultSigningProgram := "/opt/1Password/op-ssh-sign" -}}
-{{- $defaultAuthSock := printf "%s/.1password/agent.sock" .chezmoi.homeDir -}}
-{{- if eq .chezmoi.os "darwin" -}}
-{{-   $defaultSigningProgram = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign" -}}
-{{-   $defaultAuthSock = printf "%s/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock" .chezmoi.homeDir -}}
-{{- end -}}
-{{- $gitSigningKey := promptStringOnce . "gitSigningKey" "Git SSH signing public key (empty to skip signing)" $defaultSigningKey -}}
-{{- $gitSigningProgram := promptStringOnce . "gitSigningProgram" "SSH signing program path" $defaultSigningProgram -}}
-{{- $sshAuthSock := promptStringOnce . "sshAuthSock" "SSH agent socket path" $defaultAuthSock -}}
+{{- /*
+  Each machine signs commits and authenticates to git hosts with its own
+  ~/.ssh/id_ed25519, read straight from disk: no agent or password manager.
+  The public keys that verify signatures live in .chezmoidata/git.toml.
+*/ -}}
+{{- $gitSigningKeyFile := promptStringOnce . "gitSigningKeyFile" "Git SSH signing key file (empty to skip signing)" (printf "%s/.ssh/id_ed25519" .chezmoi.homeDir) -}}
 {{- $sshAuthorizedKeys := list -}}
 {{- if hasKey . "sshAuthorizedKeys" -}}
 {{-   $sshAuthorizedKeys = get . "sshAuthorizedKeys" -}}
@@ -36,9 +31,7 @@
 [data]
 gitName = {{ $gitName | quote }}
 gitEmail = {{ $gitEmail | quote }}
-gitSigningKey = {{ $gitSigningKey | quote }}
-gitSigningProgram = {{ $gitSigningProgram | quote }}
-sshAuthSock = {{ $sshAuthSock | quote }}
+gitSigningKeyFile = {{ $gitSigningKeyFile | quote }}
 obsidianVault = {{ $obsidianVault | quote }}
 talosConfig = {{ $talosConfig | quote }}
 herdrWorkspace = {{ $herdrWorkspace | quote }}

@@ -7,42 +7,6 @@ if (( $+commands[mise] )); then
   eval "$(mise activate zsh)"
 fi
 
-# In a TUIOS pane, use the SSH agent of the client that used the session last:
-# the forwarded agent while connected remotely, this machine's agent locally.
-# Re-resolved before every prompt so reconnects take effect; when the forwarded
-# socket is gone, fall back to the local agent set in ~/.zshenv.
-if (( $+commands[tuios] )); then
-  __tuios_refresh_agent() {
-    local sock
-    sock=$(tuios ssh-agent-path 2>/dev/null) || return
-    if [[ -S $sock ]]; then
-      export SSH_AUTH_SOCK=$sock
-    elif [[ -n ${__dotfiles_local_agent:-} ]]; then
-      export SSH_AUTH_SOCK=$__dotfiles_local_agent
-    fi
-  }
-  autoload -Uz add-zsh-hook
-  add-zsh-hook precmd __tuios_refresh_agent
-  __tuios_refresh_agent
-fi
-
-# Same for herdr: panes get a stable agent address that follows the client's
-# forwarded agent (or the agent the server started with). When it has none,
-# it points nowhere; fall back to the local agent until it comes back.
-if [[ -n ${HERDR_SOCKET_PATH:-} ]]; then
-  __herdr_agent=$HERDR_SOCKET_PATH.agent
-  __herdr_refresh_agent() {
-    if [[ -S $__herdr_agent ]]; then
-      export SSH_AUTH_SOCK=$__herdr_agent
-    elif [[ -n ${__dotfiles_local_agent:-} ]]; then
-      export SSH_AUTH_SOCK=$__dotfiles_local_agent
-    fi
-  }
-  autoload -Uz add-zsh-hook
-  add-zsh-hook precmd __herdr_refresh_agent
-  __herdr_refresh_agent
-fi
-
 # Homebrew keeps PostgreSQL client tools keg-only on macOS.
 if [[ -d /opt/homebrew/opt/libpq/bin ]]; then
   path=(/opt/homebrew/opt/libpq/bin $path)
