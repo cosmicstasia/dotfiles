@@ -45,8 +45,10 @@ helix = "latest"
 micro = "latest"
 fastfetch = "latest"
 
-# Coding agents (omp ships standalone binaries; no bun install needed)
+# Coding agents (standalone binaries; no bun or npm install needed)
 oh-my-pi = "latest"
+claude = "latest"
+codex = "latest"
 
 # Git and code review
 chezmoi = "latest"
