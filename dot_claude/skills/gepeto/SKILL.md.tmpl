@@ -35,7 +35,7 @@ on: [{
 {
   method: "local.set",
   params: {
-    url: "{{input.event[1]}}"
+    url: "{{ "{{" }}input.event[1]}}"
   }
 }
 ```
@@ -99,7 +99,7 @@ When the task does involve launcher work, first determine whether the request is
 - If you are not already inside a plugin launcher folder, create a new folder under `PINOKIO_HOME/plugin/<unique_name>`.
 - If the folder name is not obvious from the project or the user has not provided one, ask the user to confirm the folder name before creating it.
 - Do not place plugin launchers under `PINOKIO_HOME/api`.
-- When a plugin is meant to operate on the user's current project, its `run` step should target the caller's folder with `{{args.cwd}}` instead of the plugin folder itself.
+- When a plugin is meant to operate on the user's current project, its `run` step should target the caller's folder with `{{ "{{" }}args.cwd}}` instead of the plugin folder itself.
 
 ### 3. Apply structure rules only after choosing the launcher type
 - App launchers and plugin launchers are peers. Do not treat a plugin launcher as a special case of an app launcher, or vice versa.
@@ -268,7 +268,7 @@ module.exports = {
         // the input.event is the regular expression match object from the previous step
         // In this example, since the pattern was "/(http:\/\/\\S+)/", input.event[1] will include the exact http url match caputred by the parenthesis.
         // Therefore setting the local variable 'url'
-        url: "{{input.event[1]}}"
+        url: "{{ "{{" }}input.event[1]}}"
       }
     }
   ]
@@ -333,11 +333,11 @@ These APIs can be used to describe each step in a pinokio script:
 - web.open: open a url in web browser
 - hf.download: Hugging Face CLI download API
 ### Template variables
-The following variables are accessible inside template expressions (example `{{args.command}` in scripts, resulting in dynamic behaviors of scripts:
+The following variables are accessible inside template expressions (example `{{ "{{" }}args.command}` in scripts, resulting in dynamic behaviors of scripts:
 - input: An input is a variable that gets passed from one RPC call to the next
 - args: args is the parameter object that gets passed into the script (via pinokio.js `params`). Unlike `input` which takes the value passed in from the immediately previous step, `args` is a global value that is the same through out the entire script execution.
 - local: local variable object that can be set with `local.set` API
-- self: refers to the script file itself (which is JSON or JavaScript). For example if `start.js` that's currently running has `daemon: true` set, `{{self.daemon}}` will evaluate to true.
+- self: refers to the script file itself (which is JSON or JavaScript). For example if `start.js` that's currently running has `daemon: true` set, `{{ "{{" }}self.daemon}}` will evaluate to true.
 - uri: The current script uri
 - port: The next available port. Very useful when you need to launch an app at a specific port without port conflicts.
 - cwd: The current script execution folder path
@@ -348,11 +348,11 @@ The following variables are accessible inside template expressions (example `{{a
 - current: The current variable points to the index of the currently executing instruction within the run array.
 - next: The next variable points to the index of the next instruction to be executed. (null if the current instruction is the final instruction in the run array)
 - envs: You can access the environment variables of the currently running process with envs object.
-- which: Check whether a command exists and return its absolute path (example: `{{which('winget')}}`). This is the correct way to resolve command paths inside reproducible Pinokio scripts, including custom shell selection such as `shell: "{{which('bash')}}"`. If you are outside a Pinokio-managed shell and only need to inspect Pinokio's environment manually, use `pterm which <command>`, but do NOT copy that user-specific absolute path into launcher scripts.
-- exists: Check whether a file or folder exists at the specified relative path (example: `"when": "{{!exists('app')}}"`). Can be used with the `when` attribute to determine a path's existence and trigger custom logic. Use relative paths and it will resolve automatically to the current execution folder. 
-- running: Check whether a script file is running (example: `"when": "{{!running('start.js')}}"`). Can be used with the `when` attribute to determine a path's existence and trigger custom logic. Use relative paths and it will resolve automatically to the current execution folder. 
+- which: Check whether a command exists and return its absolute path (example: `{{ "{{" }}which('winget')}}`). This is the correct way to resolve command paths inside reproducible Pinokio scripts, including custom shell selection such as `shell: "{{ "{{" }}which('bash')}}"`. If you are outside a Pinokio-managed shell and only need to inspect Pinokio's environment manually, use `pterm which <command>`, but do NOT copy that user-specific absolute path into launcher scripts.
+- exists: Check whether a file or folder exists at the specified relative path (example: `"when": "{{ "{{" }}!exists('app')}}"`). Can be used with the `when` attribute to determine a path's existence and trigger custom logic. Use relative paths and it will resolve automatically to the current execution folder. 
+- running: Check whether a script file is running (example: `"when": "{{ "{{" }}!running('start.js')}}"`). Can be used with the `when` attribute to determine a path's existence and trigger custom logic. Use relative paths and it will resolve automatically to the current execution folder. 
 - os: Pinokio exposes the node.js os module through the os variable.
-- path: Pinokio exposes the Node.js path module through the path variable (example: `{{path.resolve(...)}}`
+- path: Pinokio exposes the Node.js path module through the path variable (example: `{{ "{{" }}path.resolve(...)}}`
 
 ## System Capabilities
 ### Package Management (Use in Order of Preference)
@@ -416,14 +416,14 @@ logs/
   - Always try to find a way to launch servers at 127.0.0.1 or localhost, often by specifying launch flags or using environment variables. Some apps launch apps at 0.0.0.0 by default but we do not want this.
 - Launch Port related
   - In case the app itself automatically launches at the next available port by default (for example Gradio does this), do NOT specify port, since it's taken care of by the app itself. Always try to minimize the amount of code.
-  - If the install instruction says to launch at a specific port, don't use the hardcoded port they suggest since there's a risk of port conflicts. Instead, use Pinokio's `{{port}}` template expression to automatically get the next available port.
-  - For example, if the instruction says `python app.py --port 7860`, don't use that hardcoded port since there might be another app running at that port. Instead, automatically assign the next available port like this: `python app.py --port {{port}}`
-  - Note that the `{{port}}` expression always returns the next immediately available port for each step, so if you have multiple steps in a script and use `{{port}}` in multiple steps, the value will be different. So if you want to launch at the next available port and then later reuse that port, you will need to first use `{{port}}` to get the next available port, and save the value in local variable using `local.set`, and then use the `{{local.<variable_name>}}` expression later.
+  - If the install instruction says to launch at a specific port, don't use the hardcoded port they suggest since there's a risk of port conflicts. Instead, use Pinokio's `{{ "{{" }}port}}` template expression to automatically get the next available port.
+  - For example, if the instruction says `python app.py --port 7860`, don't use that hardcoded port since there might be another app running at that port. Instead, automatically assign the next available port like this: `python app.py --port {{ "{{" }}port}}`
+  - Note that the `{{ "{{" }}port}}` expression always returns the next immediately available port for each step, so if you have multiple steps in a script and use `{{ "{{" }}port}}` in multiple steps, the value will be different. So if you want to launch at the next available port and then later reuse that port, you will need to first use `{{ "{{" }}port}}` to get the next available port, and save the value in local variable using `local.set`, and then use the `{{ "{{" }}local.<variable_name>}}` expression later.
 ### 2. shell.run API
 - When writing `shell.run` API requests, always use relative paths (no absolute paths) for the `path` field. For example, if you need to run a command from `app` folder, the `path` attribute should simply be `app`, instead of its full absolute path.
-- If a launcher needs to use a command that Pinokio already provides, prefer resolving it with `{{which('command')}}` inside the script instead of assuming the command name will always be on `PATH`.
+- If a launcher needs to use a command that Pinokio already provides, prefer resolving it with `{{ "{{" }}which('command')}}` inside the script instead of assuming the command name will always be on `PATH`.
 - Do NOT automatically avoid `bash`-based install commands on Windows. Pinokio's Windows environment includes `bash` through its bundled toolchain, so commands such as `curl -fsSL ... | bash` are acceptable when they run inside a Pinokio-managed shell and there is no simpler cross-platform alternative.
-- If a Windows launcher needs to run the shell itself in bash instead of the default `cmd.exe`, set `shell: "{{which('bash')}}"` on the `shell.run` step.
+- If a Windows launcher needs to run the shell itself in bash instead of the default `cmd.exe`, set `shell: "{{ "{{" }}which('bash')}}"` on the `shell.run` step.
 - If a separate debugging process or external local tool did not inherit Pinokio's environment, you may use `pterm which <command>` to inspect what Pinokio would resolve. Do NOT turn that result into a hardcoded script path; for launcher scripts, always use `which()` or `kernel.which()` so the script stays reproducible across machines.
 ### 2. Package managers
 - When installing python packages, try best to use `uv` instead of `pip` even if the install instruction says to use pip. Instead of `pip install -r requirements.txt`, you can simply use `uv pip install -r requirements.txt` for example. Even if the project's own README says use pip or poetry, first check if there's a way to use uv instead.
