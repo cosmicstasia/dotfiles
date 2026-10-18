@@ -1,7 +1,7 @@
-# herdr-plus settings. Both pickers open as zoomed panes (not popups or
-# overlays), so prefix+q (close_pane) closes them like any other pane.
+# herdr-plus settings. Both pickers open as floating popups (prefix+up,
+# prefix+down); quitting the picker closes the popup.
 [projects]
-placement = "zoomed"
+placement = "popup"
 
 [quick_actions]
-placement = "zoomed"
+placement = "popup"

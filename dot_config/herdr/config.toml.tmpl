@@ -122,24 +122,21 @@ type = "shell"
 command = "herdr pane split --current --direction right --cwd \"$PWD\" --focus"
 description = "split pane side by side"
 
-# herdr popups can't be moved and swallow every key, prefix included, so these
-# open as zoomed panes instead: prefix+q (close_pane) closes one, prefix+z
-# unzooms it into the layout, where its borders drag like any pane. Closing the
-# program closes the pane too. Plugins are listed in .chezmoidata/herdr.toml.
-
-# herdr-bar command bar: fuzzy-jump to any tab, pane, or agent. Its own action
-# always opens a popup, so open its pane directly.
+# herdr-bar command bar: fuzzy-jump to any tab, pane, or agent. Plugins are
+# listed in .chezmoidata/herdr.toml.
 [[keys.command]]
 key = "prefix+o"
-type = "shell"
-command = "\"${HERDR_BIN_PATH:-herdr}\" plugin pane open --plugin herdr-bar --entrypoint bar --placement zoomed --focus"
+type = "plugin_action"
+command = "herdr-bar.open"
 description = "command bar"
 
-# Replace tmux-floax: a scratch terminal over the current tab.
+# Replace tmux-floax with Herdr's native floating terminal.
 [[keys.command]]
 key = "prefix+p"
-type = "pane"
-command = "/bin/zsh"
+type = "popup"
+command = "HERDR_SCRATCH_POPUP=1 exec /bin/zsh"
+width = "80%"
+height = "80%"
 description = "open floating terminal"
 
 [[keys.command]]  # open in a split pane
