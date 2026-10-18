@@ -14,3 +14,6 @@ repo = "smarzban/herdr-file-viewer"
 [[herdrPlugins]]
 repo = "devswha/herdr-web-ui"
 ref = "v0.4.11"
+
+[[herdrPlugins]]
+repo = "eliasstravik/herdr-projects" # work board of delegated agent tasks
