@@ -1,0 +1,16 @@
+# herdr plugins installed on every machine by
+# run_onchange_after_29-herdr-plugins.sh. `ref` pins a tag or commit;
+# without it herdr installs the default branch.
+
+[[herdrPlugins]]
+repo = "jeffarese/herdr-bar" # prefix+o command bar
+
+[[herdrPlugins]]
+repo = "speardragon/herdr-yazi" # ray.file-explorer: prefix+f / prefix+F (needs yazi)
+
+[[herdrPlugins]]
+repo = "smarzban/herdr-file-viewer"
+
+[[herdrPlugins]]
+repo = "devswha/herdr-web-ui"
+ref = "v0.4.11"
