@@ -32,6 +32,7 @@ let extra_paths = [
     $"($env.HOME)/.cargo/bin"
     $"($env.HOME)/.bun/bin"
     $"($env.HOME)/.local/bin"
+    $"($env.HOME)/.herdr-projects/data/bin"
     "/Library/TeX/texbin"
 ]
 $env.PATH = ($env.PATH | prepend ($extra_paths | where {|path| $path | path exists }) | uniq)
