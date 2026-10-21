@@ -19,10 +19,10 @@
 {{- $talosConfig := promptStringOnce . "talosConfig" "Talos config path (optional)" -}}
 {{- $herdrWorkspace := promptStringOnce . "herdrWorkspace" "Herdr workspace path" -}}
 {{- $defaultPeerName := "omarchy" -}}
-{{- $defaultPeerAddr := "omarchy.tailb320db.ts.net" -}}
+{{- $defaultPeerAddr := "omarchy.netbird.selfhosted" -}}
 {{- if ne .chezmoi.os "darwin" -}}
 {{-   $defaultPeerName = "macbook" -}}
-{{-   $defaultPeerAddr = "anastasia@cash-macbook-pro.tailb320db.ts.net" -}}
+{{-   $defaultPeerAddr = "anastasia@anastasias-macbook-pro-3.netbird.selfhosted" -}}
 {{- end -}}
 {{- $peerName := promptStringOnce . "peerName" "name for the other machine in tuios and herdr (empty to skip)" $defaultPeerName -}}
 {{- $peerAddr := promptStringOnce . "peerAddr" "ssh address of the other machine" $defaultPeerAddr -}}

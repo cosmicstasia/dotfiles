@@ -45,7 +45,10 @@ Omarchy theme directory (`~/.local/state/omarchy/current/theme` on Omarchy 4).
 ## Working across both machines
 
 Each machine knows the other under `peerName`, reached at `peerAddr` (chezmoi
-data; `chezmoi init` asks for both).
+data; `chezmoi init` asks for both). Peers use NetBird DNS:
+`omarchy.netbird.selfhosted` and
+`anastasia@anastasias-macbook-pro-3.netbird.selfhosted`. Both machines must be
+connected to NetBird; ordinary OpenSSH provides authentication.
 
 - **tuios** lists it in `~/.config/tuios/config.d/hosts.toml`. Its sessions show
   in the tuios sidebar, or open one directly:
