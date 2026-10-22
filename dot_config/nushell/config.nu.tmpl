@@ -38,8 +38,8 @@ let extra_paths = [
 $env.PATH = ($env.PATH | prepend ($extra_paths | where {|path| $path | path exists }) | uniq)
 
 
-# Set Edit Mode to vi 
-$env.config.edit_mode = 'vi'
+# Emacs edit mode (not vi).
+$env.config.edit_mode = 'emacs'
 
 $env.EDITOR = "nvim"
 $env.KUBECONFIG = ($env.HOME | path join ".kube/config")

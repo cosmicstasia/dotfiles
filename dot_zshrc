@@ -25,16 +25,15 @@ if [[ -t 0 && -t 1 && ${TUIOS_AUTOSTART:-0} == 1 && $TERM != dumb \
   tuios attach && exit
 fi
 
-# Vi editing mode.
-bindkey -v
+# Emacs editing mode (not vi).
+bindkey -e
 
 # In herdr's scratch popup (prefix+p), the prefix and x exit the shell, which
 # closes the popup: the popup gets every key, so herdr's own prefix+q can't.
 if [[ -n ${HERDR_SCRATCH_POPUP:-} ]]; then
   __herdr_popup_exit() { exit }
   zle -N __herdr_popup_exit
-  bindkey -M viins '^Ax' __herdr_popup_exit
-  bindkey -M vicmd '^Ax' __herdr_popup_exit
+  bindkey -M emacs '^Ax' __herdr_popup_exit
 fi
 
 # History, matching what nix-darwin's /etc/zshrc sets on the Mac so the
