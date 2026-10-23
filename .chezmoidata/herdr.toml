@@ -20,3 +20,6 @@ repo = "eliasstravik/herdr-projects" # work board of delegated agent tasks
 
 [[herdrPlugins]]
 repo = "cloudmanic/herdr-plus" # project templates and quick actions
+
+[[herdrPlugins]]
+repo = "persiyanov/herdr-reviewr" # review an agent diff in a pane and send comments back
