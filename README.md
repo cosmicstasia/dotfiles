@@ -1,7 +1,7 @@
 # Dotfiles
 
-Cross-platform configuration for the MacBook (macOS) and the Omarchy desktop
-(Arch Linux), managed by chezmoi.
+Cross-platform configuration for the Omarchy desktop (Arch Linux) and macOS,
+managed by chezmoi. The MacBook was sold, so only Omarchy is in use for now.
 
 ## Defaults
 
@@ -42,20 +42,22 @@ Omarchy theme directory (`~/.local/state/omarchy/current/theme` on Omarchy 4).
 - zsh-autosuggestions and fast-syntax-highlighting are git checkouts in
   `~/.local/share/zsh/plugins` (see `.chezmoiexternal.toml`).
 
-## Working across both machines
+## Working across two machines
 
-Each machine knows the other under `peerName`, reached at `peerAddr` (chezmoi
-data; `chezmoi init` asks for both). Peers use NetBird DNS:
-`omarchy.netbird.selfhosted` and
-`anastasia@anastasias-macbook-pro-3.netbird.selfhosted`. Both machines must be
-connected to NetBird; ordinary OpenSSH provides authentication.
+Currently there is only the Omarchy desktop (the MacBook was sold), so
+`peerName` and `peerAddr` are empty in chezmoi data and the peer config below is
+skipped: no extra `~/.ssh/config` host, no tuios host and no herdr machine.
+
+To pair a second machine, set `peerName` and `peerAddr` (`chezmoi init` asks;
+empty skips it), for example a NetBird name such as
+`anastasia@<host>.netbird.selfhosted`. Both machines must be connected to
+NetBird; ordinary OpenSSH provides authentication. Then:
 
 - **tuios** lists it in `~/.config/tuios/config.d/hosts.toml`. Its sessions show
   in the tuios sidebar, or open one directly:
 
   ```sh
-  tuios attach --host omarchy        # from the MacBook
-  tuios attach --host macbook        # from the Omarchy desktop
+  tuios attach --host <peerName>
   ```
 
   tuios asks before it trusts a new host: run `tuios config apply` from a

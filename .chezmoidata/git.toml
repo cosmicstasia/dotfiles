@@ -11,7 +11,7 @@ host = "github.com"
 
 # Public keys trusted to sign commits as gitEmail, written to
 # ~/.config/git/allowed_signers. Old keys stay listed so the commits they
-# signed still verify.
+# signed still verify, including the sold MacBook's (kept for history only).
 [git]
 signerKeys = [
   # 1Password "Git Signing Key", used before the per-machine keys.

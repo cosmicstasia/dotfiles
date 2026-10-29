@@ -18,14 +18,9 @@
 {{- $obsidianVault := promptStringOnce . "obsidianVault" "Obsidian vault path (optional)" -}}
 {{- $talosConfig := promptStringOnce . "talosConfig" "Talos config path (optional)" -}}
 {{- $herdrWorkspace := promptStringOnce . "herdrWorkspace" "Herdr workspace path" -}}
-{{- $defaultPeerName := "omarchy" -}}
-{{- $defaultPeerAddr := "omarchy.netbird.selfhosted" -}}
-{{- if ne .chezmoi.os "darwin" -}}
-{{-   $defaultPeerName = "macbook" -}}
-{{-   $defaultPeerAddr = "anastasia@anastasias-macbook-pro-3.netbird.selfhosted" -}}
-{{- end -}}
-{{- $peerName := promptStringOnce . "peerName" "name for the other machine in tuios and herdr (empty to skip)" $defaultPeerName -}}
-{{- $peerAddr := promptStringOnce . "peerAddr" "ssh address of the other machine" $defaultPeerAddr -}}
+{{- /* Leave both empty while there is no second machine: the ssh, tuios and herdr peer config is skipped. */ -}}
+{{- $peerName := promptStringOnce . "peerName" "name for the other machine in tuios and herdr (empty to skip)" "" -}}
+{{- $peerAddr := promptStringOnce . "peerAddr" "ssh address of the other machine (empty to skip)" "" -}}
 {{- $nineRouterApiKey := promptStringOnce . "nineRouterApiKey" "9router API key for omp (optional, stays local)" -}}
 
 [data]
