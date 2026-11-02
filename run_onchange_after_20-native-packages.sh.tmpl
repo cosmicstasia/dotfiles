@@ -3,15 +3,8 @@
 # Everything else comes from ~/.config/mise/config.toml.
 set -eu
 
-{{ if eq .chezmoi.os "darwin" -}}
-# Re-run when the Brewfile changes: {{ include "Brewfile.tmpl" | sha256sum }}
-if [ ! -x /opt/homebrew/bin/brew ]; then
-  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
-/opt/homebrew/bin/brew bundle --file="$HOME/Brewfile"
-{{- else if eq .chezmoi.os "linux" }}
 if ! command -v pacman >/dev/null 2>&1; then
-  echo "Only Arch-based systems (Omarchy) are supported on Linux" >&2
+  echo "Only Arch-based systems (Omarchy) are supported" >&2
   exit 1
 fi
 
@@ -56,4 +49,3 @@ sudo pacman -S --needed --noconfirm \
   qemu-full \
   scrcpy \
   jadx
-{{- end }}

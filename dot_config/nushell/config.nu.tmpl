@@ -24,16 +24,13 @@ alias py = python3
 alias ".." = cd ..
 alias docker = podman
 
-# mise (mise.nu above) provides the toolchain and JAVA_HOME; Homebrew on
-# macOS only holds casks and the few formulae mise cannot install.
+# mise (mise.nu above) provides the toolchain and JAVA_HOME.
 let extra_paths = [
-    "/opt/homebrew/bin"
-    "/opt/homebrew/sbin"
     $"($env.HOME)/.cargo/bin"
     $"($env.HOME)/.bun/bin"
     $"($env.HOME)/.local/bin"
     $"($env.HOME)/.herdr-projects/data/bin"
-    "/Library/TeX/texbin"
+    $"($env.HOME)/.local/share/omarchy/bin"
 ]
 $env.PATH = ($env.PATH | prepend ($extra_paths | where {|path| $path | path exists }) | uniq)
 

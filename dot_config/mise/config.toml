@@ -1,6 +1,6 @@
-# Global toolchain shared by the MacBook and the Omarchy desktop.
-# Native package managers (Homebrew via ~/Brewfile on macOS, pacman on Arch)
-# only provide GUI apps and the system libraries/daemons mise cannot.
+# Global toolchain shared across machines.
+# Native package managers (pacman on Omarchy) only provide GUI apps and
+# system libraries/daemons mise cannot.
 # Change a tool here and `chezmoi apply` runs `mise install` on that machine.
 
 [settings]

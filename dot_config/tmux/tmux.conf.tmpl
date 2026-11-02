@@ -96,10 +96,6 @@ set -g @catppuccin_date_time_icon "󰥔"
 set -g @catppuccin_date_time_color "#f9e2af"
 set -g @catppuccin_date_time_text "%a %d %b · %H:%M"
 
-# Kept available for adding the custom meetings module later.
-{{ if eq .chezmoi.os "darwin" -}}
-set -g @catppuccin_meetings_text "#($HOME/.config/tmux/scripts/cal.sh)"
-{{ end }}
 {{- end }}
 # Bindings
 bind-key n command-prompt -p "New session name: " "new-session -s '%%'"

@@ -1,15 +1,10 @@
-# Interactive zsh, shared by the MacBook and the Omarchy desktop.
+# Interactive zsh, shared across machines.
 # Managed by chezmoi: edit ~/.local/share/chezmoi/dot_zshrc.
 
 # mise first: it puts the configured tool versions on PATH, so everything
 # below (tuios included) resolves to the mise-managed binaries.
 if (( $+commands[mise] )); then
   eval "$(mise activate zsh)"
-fi
-
-# Homebrew keeps PostgreSQL client tools keg-only on macOS.
-if [[ -d /opt/homebrew/opt/libpq/bin ]]; then
-  path=(/opt/homebrew/opt/libpq/bin $path)
 fi
 
 # Terminals open a plain shell. Set TUIOS_AUTOSTART=1 to open into tuios
@@ -36,8 +31,7 @@ if [[ -n ${HERDR_SCRATCH_POPUP:-} ]]; then
   bindkey -M emacs '^Ax' __herdr_popup_exit
 fi
 
-# History, matching what nix-darwin's /etc/zshrc sets on the Mac so the
-# Omarchy desktop (no system zshrc) behaves the same. Atuin owns search.
+# History. Atuin owns search.
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=2000
 SAVEHIST=2000
@@ -76,8 +70,7 @@ from() {
   command jq --slurp '.' -- "$@"
 }
 
-# Completion. nix-darwin's /etc/zshrc already runs compinit on the Mac;
-# Arch has no system zshrc that does.
+# Completion.
 if (( ! $+functions[compdef] )); then
   autoload -Uz compinit bashcompinit
   compinit
@@ -156,9 +149,8 @@ __plugins=$HOME/.local/share/zsh/plugins
   && source "$__plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 # fast-syntax-highlighting, themed by ~/.config/fsh/palette.ini. The theme
-# uses only the 16 terminal colours, so it follows kitty's theme: Omarchy's on
-# the desktop (live, on every theme switch), the Mac's own on the Mac.
-# fast-theme compiles the ini into its cache; redo that when the ini changes.
+# uses only 16 terminal colours, so it follows the active Omarchy theme.
+# fast-theme compiles the ini into its cache; redo when the ini changes.
 if [[ -r $__plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh ]]; then
   source "$__plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
   __fsh_ini=${XDG_CONFIG_HOME:-$HOME/.config}/fsh/palette.ini

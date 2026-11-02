@@ -1,7 +1,7 @@
 {{- $peerName := get . "peerName" | default "" -}}
 {{- $peerAddr := get . "peerAddr" | default "" -}}
 {{- if and $peerName $peerAddr -}}
-# The other machine of the MacBook/Omarchy pair. Its tuios sessions show in
+# The other machine of the omarchy/dell-xps pair. Its tuios sessions show in
 # the sidebar under this name; `tuios attach --host {{ $peerName }}` opens one.
 # Rendered by chezmoi from peerName/peerAddr in chezmoi.toml.
 # tuios asks before it widens [hosts]: run `tuios config apply` outside tuios.

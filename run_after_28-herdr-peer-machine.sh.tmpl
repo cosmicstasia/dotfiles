@@ -2,7 +2,7 @@
 {{- $peerAddr := get . "peerAddr" | default "" -}}
 {{- if and $peerName $peerAddr -}}
 #!/bin/sh
-# Save the other machine of the MacBook/Omarchy pair in herdr, so its
+# Save the other machine of the omarchy/dell-xps pair in herdr, so its
 # workspaces and agents show in the sidebar under "{{ $peerName }}", as tuios
 # lists it under [hosts]. Runs on every apply; it only reads herdr's machine
 # list unless the peer is missing, and then lets `herdr machine add` start the
@@ -22,7 +22,7 @@ if herdr machine list --json 2>/dev/null \
   exit 0
 fi
 
-# macOS has no timeout(1): a bounded, prompt-free ssh probe keeps an asleep
+# A bounded, prompt-free ssh probe keeps an asleep
 # or locked peer from stalling chezmoi apply.
 if ssh -o BatchMode=yes -o ConnectTimeout=8 "$addr" true </dev/null 2>/dev/null \
   && herdr machine add "$addr" --label "$name" --remote-session default </dev/null; then

@@ -5,3 +5,11 @@
 
 # Git signs with ~/.ssh/id_ed25519 directly; no wrapper around the agent.
 .local/bin/git-ssh-sign
+
+# No macOS path_helper to counter on Omarchy; dotfiles_path already runs
+# from ~/.zshenv on every shell.
+.zprofile
+# macOS-only: the MacBook that used them was sold.
+Brewfile
+.config/nvim/lua/plugins/colorscheme.lua
+.config/tmux/scripts/cal.sh

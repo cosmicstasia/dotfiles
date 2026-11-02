@@ -15,7 +15,6 @@ export TALOSCONFIG={{ $talosConfig | quote }}
 # mise-managed tools visible to non-interactive shells too (scripts, editors,
 # the ssh link `tuios hosts` opens to the other machine); interactive shells
 # replace them with real paths through `mise activate` in ~/.zshrc.
-# ~/.zprofile calls this again because macOS path_helper reorders PATH.
 __dotfiles_path() {
   typeset -gU path
   local -a front
@@ -26,14 +25,8 @@ __dotfiles_path() {
     "$HOME/.cargo/bin" \
     "$BUN_INSTALL/bin" \
     "$HOME/.herdr-projects/data/bin" \
-{{- if eq .chezmoi.os "darwin" }}
-    /opt/homebrew/bin \
-    /opt/homebrew/sbin \
-    /Library/TeX/texbin \
-{{- else }}
     "$HOME/.local/share/omarchy/bin" \
-{{- end }}
-    ; do
+  ; do
     [[ -d $dir ]] && front+=("$dir")
   done
   path=("${front[@]}" "${path[@]}")

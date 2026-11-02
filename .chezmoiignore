@@ -11,6 +11,12 @@ README.md
 .config/emacs/elpa
 .config/emacs/eshell
 .config/emacs/transient
+
+# Monitor layout and input devices are genuinely per-machine (the desktop's
+# ultra-wide display and the laptop's built-in panel/touchpad share no
+# sensible default), so they are never synced.
+.config/hypr/monitors.lua
+.config/hypr/input.lua
 .config/emacs/tree-sitter
 .config/emacs/custom.el~
 .config/emacs/matugen-colors.el
@@ -31,16 +37,8 @@ README.md
 # tuios backups and runtime state
 .config/tuios/*.bak*
 
-{{ if ne .chezmoi.os "darwin" }}
-Brewfile
-Library
-{{ end }}
-{{ if ne .chezmoi.os "linux" }}
-.config/xdg-terminals.list
-{{ end }}
-
-# Theming: on Omarchy every app follows the Omarchy theme; elsewhere (the Mac)
-# apps keep their own colours. See .chezmoitemplates/omarchy-theme.
+# Theming: on Omarchy every app follows the Omarchy theme; this check
+# guards templates in case Omarchy itself is ever absent.
 {{ if includeTemplate "omarchy-theme" . | trim }}
 .config/kitty/themes
 # omarchy-theme-set-pi writes this on every theme change.

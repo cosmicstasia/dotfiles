@@ -1,29 +1,30 @@
 # Dotfiles
 
-Cross-platform configuration for the Omarchy desktop (Arch Linux) and macOS,
-managed by chezmoi. The MacBook was sold, so only Omarchy is in use for now.
+Configuration for two Omarchy (Arch Linux) machines — the desktop
+(`omarchy`) and this Dell XPS 15 (`dell-xps`) — managed by chezmoi. The
+MacBook that used to be the second machine was sold; nothing here targets
+macOS anymore.
 
 ## Defaults
 
-- **zsh** is the login shell on both machines (`~/.zshenv`, `~/.zprofile`,
-  `~/.zshrc`). kitty, tmux, herdr, Neovim terminals and tuios panes all start it.
+- **zsh** is the login shell on both machines (`~/.zshenv`, `~/.zshrc`).
+  kitty, tmux, herdr, Neovim terminals and tuios panes all start it.
 - **tuios** is the terminal workspace, opt-in: terminals open a plain zsh. Set
   `TUIOS_AUTOSTART=1` and a top-level zsh runs `tuios attach`, which restores
   or creates a session (skipped inside tuios/tmux/herdr/zellij, editors and
-  SSH logins). On Omarchy, `Super+Alt+Return` opens a terminal straight into tuios.
-- On Omarchy, `~/.config/xdg-terminals.list` makes kitty the default terminal.
+  SSH logins). `Super+Alt+Return` opens a terminal straight into tuios.
+- `~/.config/xdg-terminals.list` makes kitty the default terminal.
 
 ## Theming
 
-On Omarchy every app follows the Omarchy theme and changes with it; on the Mac
-each app keeps its own colours (Catppuccin Mocha, Noctalia for kitty). Templates
-tell the two apart with `.chezmoitemplates/omarchy-theme`, which finds the active
-Omarchy theme directory (`~/.local/state/omarchy/current/theme` on Omarchy 4).
+Every app follows the Omarchy theme and changes with it. Templates find the
+active theme directory via `.chezmoitemplates/omarchy-theme`
+(`~/.local/state/omarchy/current/theme` on Omarchy 4).
 
-| App | On Omarchy |
+| App | Behaviour |
 | --- | --- |
-| Neovim | `lua/plugins/theme.lua` links the theme's `neovim.lua`, plus omarchy-nvim's hot-reload, all-themes and transparency files; `colorscheme.lua` is Mac-only |
-| kitty | includes Omarchy's defaults and the theme's `kitty.conf`; no font, opacity or theme of its own |
+| Neovim | `lua/plugins/theme.lua` links the theme's `neovim.lua`, plus omarchy-nvim's hot-reload, all-themes and transparency files |
+| kitty | includes Omarchy's defaults and the theme's `kitty.conf` |
 | tmux, herdr, tuios, starship | draw with the terminal (ANSI) palette, as Omarchy's own configs do |
 | btop | `color_theme = "current"`, linked to the theme's `btop.theme` |
 | tuios selection colours, omp | rendered by Omarchy from `~/.config/omarchy/themed/*.tpl` on every theme change |
@@ -35,29 +36,31 @@ Omarchy theme directory (`~/.local/state/omarchy/current/theme` on Omarchy 4).
 - **mise** (`~/.config/mise/config.toml`) installs the shared CLI toolchain and
   language runtimes on both machines, at the same versions. `chezmoi apply`
   runs `mise install` whenever that file changes.
-- **Homebrew** (`~/Brewfile`, macOS only) keeps GUI casks and the formulae mise
-  cannot provide: system libraries, daemons and compiled toolchains.
-- **pacman** (Omarchy) installs the same native set; see
-  `run_onchange_after_20-native-packages.sh.tmpl`.
+- **pacman** installs the native set mise cannot provide (system libraries,
+  daemons, compiled toolchains); see `run_onchange_after_20-native-packages.sh.tmpl`.
 - zsh-autosuggestions and fast-syntax-highlighting are git checkouts in
   `~/.local/share/zsh/plugins` (see `.chezmoiexternal.toml`).
 
 ## Working across two machines
 
-Currently there is only the Omarchy desktop (the MacBook was sold), so
-`peerName` and `peerAddr` are empty in chezmoi data and the peer config below is
-skipped: no extra `~/.ssh/config` host, no tuios host and no herdr machine.
+Each machine knows the other under `peerName`, reached at `peerAddr`
+(chezmoi data; `chezmoi init` asks for both). Both peer addresses use NetBird
+DNS, so NetBird must be connected on both machines; ordinary OpenSSH provides
+authentication:
 
-To pair a second machine, set `peerName` and `peerAddr` (`chezmoi init` asks;
-empty skips it), for example a NetBird name such as
-`anastasia@<host>.netbird.selfhosted`. Both machines must be connected to
-NetBird; ordinary OpenSSH provides authentication. Then:
+- `omarchy` (desktop) → `omarchy.netbird.selfhosted`
+- `dell-xps` (this machine) → its own NetBird address, set when this Dell was
+  initialized
 
-- **tuios** lists it in `~/.config/tuios/config.d/hosts.toml`. Its sessions show
-  in the tuios sidebar, or open one directly:
+Setting either empty skips the peer config below: no extra `~/.ssh/config`
+host, no tuios host and no herdr machine for it.
+
+- **tuios** lists the peer in `~/.config/tuios/config.d/hosts.toml`. Its
+  sessions show in the tuios sidebar, or open one directly:
 
   ```sh
-  tuios attach --host <peerName>
+  tuios attach --host omarchy   # from dell-xps
+  tuios attach --host dell-xps  # from omarchy
   ```
 
   tuios asks before it trusts a new host: run `tuios config apply` from a
@@ -69,8 +72,8 @@ NetBird; ordinary OpenSSH provides authentication. Then:
   switches across both machines, and `herdr --machine omarchy agent list` works
   from the CLI. An unreachable peer is retried on the next `chezmoi apply`.
 
-Both links go over SSH, so each machine needs sshd (Remote Login on macOS) and
-a key the other accepts without a prompt.
+Both links go over SSH, so each machine needs sshd running and a key the
+other accepts without a prompt.
 
 `~/.ssh/authorized_keys` gets every key in the `sshAuthorizedKeys` chezmoi
 value (a list; `chezmoi init` asks for the first one). Keys already in the file
@@ -87,7 +90,8 @@ for those hosts and leaves the rest of the file alone.
 
 `.chezmoidata/git.toml` lists the git hosts (`gitHosts`) and the public keys
 trusted to sign (`git.signerKeys`), which `~/.config/git/allowed_signers` is
-built from so `git verify-commit` works for commits from either machine.
+built from so `git verify-commit` works for commits from either machine. The
+sold MacBook's key stays listed so its old signed commits still verify.
 
 On a new machine:
 
@@ -114,8 +118,7 @@ Agent skills in `~/.agents/skills`, `~/.claude/skills`, `~/.codex/skills` and
 Home-directory paths in skills are templated for each machine. Add or update a
 skill with `chezmoi add <skill-directory>` before committing; apply on the other
 machine to install it. Codex's `.system` skills, Claude's `synced` cache and
-installer metadata are not tracked. Omarchy's `omarchy` and `diagnose-crash`
-symlinks stay local to Linux and are not installed on the Mac.
+installer metadata are not tracked.
 
 ## Bootstrap
 
@@ -125,8 +128,8 @@ chezmoi diff
 chezmoi apply
 ```
 
-The scripts run in order: install mise, install native packages (Homebrew or
-pacman), `mise install`, generate the Nushell integrations, install the tuios
+The scripts run in order: install mise, install native packages via pacman,
+`mise install`, generate the Nushell integrations, install the tuios
 omp integration, and set zsh as the login shell. The first initialization
 prompts for machine-specific paths, the tuios peer and the 9router key; re-run
 `chezmoi init` to change them later.

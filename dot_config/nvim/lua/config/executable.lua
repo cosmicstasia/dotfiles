@@ -4,7 +4,6 @@ local search_dirs = {
   vim.fn.expand("~/.local/share/mise/shims"),
   vim.fn.expand("~/.local/bin"),
   "/usr/local/bin",
-  "/opt/homebrew/bin",
   "/run/current-system/sw/bin",
 }
 
