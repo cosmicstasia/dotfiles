@@ -6,7 +6,7 @@ if command -v mise >/dev/null 2>&1 || [ -x "$HOME/.local/bin/mise" ]; then
   exit 0
 fi
 
-{{ if eq .chezmoi.os "linux" -}}
+{{ if and (eq .chezmoi.os "linux") (ne (get . "profile" | default "workstation") "server") -}}
 if command -v pacman >/dev/null 2>&1; then
   sudo pacman -S --needed --noconfirm mise
   exit 0

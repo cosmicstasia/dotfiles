@@ -3,8 +3,36 @@
 set -eu
 
 user=$(id -un)
+{{ if eq (get . "profile" | default "workstation") "server" -}}
+# Servers often have no sudo and may not ship zsh at all. Change the login
+# shell only when zsh exists and sudo works without a prompt; otherwise leave
+# it alone and print the command to run later.
+zsh_path=$(command -v zsh || true)
+if [ -z "$zsh_path" ]; then
+  echo "zsh is not installed; leaving the login shell unchanged." >&2
+  echo "Install zsh, then re-run: chezmoi apply" >&2
+  exit 0
+fi
+current=$(getent passwd "$user" | cut -d: -f7)
+if [ "$current" = "$zsh_path" ]; then
+  exit 0
+fi
+if ! sudo -n true 2>/dev/null; then
+  echo "No passwordless sudo; leaving the login shell as $current." >&2
+  echo "Run this once from a shell with sudo: chsh -s $zsh_path" >&2
+  exit 0
+fi
+if ! grep -Fxq "$zsh_path" /etc/shells; then
+  printf '%s\n' "$zsh_path" | sudo -n tee -a /etc/shells >/dev/null
+fi
+sudo -n chsh -s "$zsh_path" "$user" || true
+{{ else if eq .chezmoi.os "darwin" -}}
+zsh_path=/bin/zsh
+current=$(dscl . -read "/Users/$user" UserShell | awk '{ print $2 }')
+{{- else }}
 zsh_path=/usr/bin/zsh
 current=$(getent passwd "$user" | cut -d: -f7)
+{{- end }}
 
 if [ "$current" = "$zsh_path" ]; then
   exit 0

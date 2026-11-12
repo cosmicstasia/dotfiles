@@ -1,3 +1,28 @@
+{{- /*
+  Machine profile. "workstation" is the full desktop setup (macOS or Omarchy);
+  "server" is a headless Linux host, often one you only reach over SSH and
+  where you have no sudo. Server applies the shell, tmux, editor and agent
+  configs plus the mise toolchain, but skips desktop theming, native packages,
+  peer machines and the desktop-only apps.
+
+  A server install sets this without prompting:
+    DOTFILES_PROFILE=server chezmoi init --apply <repo>
+*/ -}}
+
+{{- $profile := env "DOTFILES_PROFILE" -}}
+
+{{- if not $profile -}}
+
+{{-   $profile = promptStringOnce . "profile" "Machine profile (workstation or server)" "workstation" -}}
+
+{{- end -}}
+
+{{- if not (has $profile (list "workstation" "server")) -}}
+
+{{-   fail (printf "DOTFILES_PROFILE must be workstation or server, not %q" $profile) -}}
+
+{{- end -}}
+
 {{- $gitName := promptStringOnce . "gitName" "Git name" -}}
 {{- $gitEmail := promptStringOnce . "gitEmail" "Git email" -}}
 {{- /*
@@ -15,27 +40,62 @@
 {{-     $sshAuthorizedKeys = list $sshAuthorizedKey -}}
 {{-   end -}}
 {{- end -}}
-{{- $obsidianVault := promptStringOnce . "obsidianVault" "Obsidian vault path (optional)" -}}
-{{- $talosConfig := promptStringOnce . "talosConfig" "Talos config path (optional)" -}}
-{{- $herdrWorkspace := promptStringOnce . "herdrWorkspace" "Herdr workspace path" -}}
-{{- $defaultPeerName := "dell-xps" -}}
-{{- $defaultPeerAddr := "dell-xps.netbird.selfhosted" -}}
-{{- if eq .chezmoi.hostname "dell-xps" -}}
-{{- $defaultPeerName = "omarchy" -}}
-{{- $defaultPeerAddr = "omarchy.netbird.selfhosted" -}}
+{{- $obsidianVault := "" -}}
+
+{{- $talosConfig := "" -}}
+
+{{- $herdrWorkspace := "" -}}
+
+{{- if ne $profile "server" -}}
+
+{{-   $obsidianVault = promptStringOnce . "obsidianVault" "Obsidian vault path (optional)" -}}
+
+{{-   $talosConfig = promptStringOnce . "talosConfig" "Talos config path (optional)" -}}
+
+{{-   $herdrWorkspace = promptStringOnce . "herdrWorkspace" "Herdr workspace path" -}}
+
 {{- end -}}
-{{- $peerName := promptStringOnce . "peerName" "name for the other machine in tuios and herdr (empty to skip)" $defaultPeerName -}}
-{{- $peerAddr := promptStringOnce . "peerAddr" "ssh address of the other machine (empty to skip)" $defaultPeerAddr -}}
+{{- /*
+  omarchy is the hub: it pairs with every other machine. The spokes
+  (dell-xps, macbook, ...) each pair only with omarchy. Edit the defaults
+  below when a machine joins or leaves; peersSpec itself is "name=addr"
+  pairs, comma-separated, and chezmoi only asks for it once per machine.
+*/ -}}
+{{- $peers := list -}}
+{{- $peersSpec := "" -}}
+{{- if ne $profile "server" -}}
+{{- $defaultPeers := list -}}
+{{- if eq .chezmoi.hostname "omarchy" -}}
+{{-   $defaultPeers = list
+        (dict "name" "dell-xps" "addr" "dell-xps.netbird.selfhosted")
+        (dict "name" "macbook" "addr" "macbook-pro-16.netbird.selfhosted") -}}
+{{- else -}}
+{{-   $defaultPeers = list (dict "name" "omarchy" "addr" "omarchy.netbird.selfhosted") -}}
+{{- end -}}
+{{- $defaultPeersParts := list -}}
+{{- range $defaultPeers -}}
+{{-   $defaultPeersParts = append $defaultPeersParts (printf "%s=%s" .name .addr) -}}
+{{- end -}}
+{{- $peersSpec = promptStringOnce . "peersSpec" "other machines in tuios/herdr/ssh, as name=addr pairs separated by commas (empty to skip)" (join "," $defaultPeersParts) -}}
+{{- end -}}
+{{- $peers = list -}}
+{{- if $peersSpec -}}
+{{-   range splitList "," $peersSpec -}}
+{{-     $kv := splitList "=" . -}}
+{{-     $peers = append $peers (dict "name" (index $kv 0) "addr" (index $kv 1)) -}}
+{{-   end -}}
+{{- end -}}
 {{- $nineRouterApiKey := promptStringOnce . "nineRouterApiKey" "9router API key for omp (optional, stays local)" -}}
 
 [data]
+profile = {{ $profile | quote }}
 gitName = {{ $gitName | quote }}
 gitEmail = {{ $gitEmail | quote }}
 gitSigningKeyFile = {{ $gitSigningKeyFile | quote }}
 obsidianVault = {{ $obsidianVault | quote }}
 talosConfig = {{ $talosConfig | quote }}
 herdrWorkspace = {{ $herdrWorkspace | quote }}
-peerName = {{ $peerName | quote }}
-peerAddr = {{ $peerAddr | quote }}
+peersSpec = {{ $peersSpec | quote }}
+peers = [{{ range $i, $p := $peers }}{{ if $i }}, {{ end }}{ name = {{ $p.name | quote }}, addr = {{ $p.addr | quote }} }{{ end }}]
 nineRouterApiKey = {{ $nineRouterApiKey | quote }}
 sshAuthorizedKeys = [{{ range $i, $key := $sshAuthorizedKeys }}{{ if $i }}, {{ end }}{{ $key | quote }}{{ end }}]

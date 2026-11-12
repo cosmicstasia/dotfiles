@@ -1,12 +1,12 @@
-{{- $peerName := get . "peerName" | default "" -}}
-{{- $peerAddr := get . "peerAddr" | default "" -}}
-{{- if and $peerName $peerAddr -}}
-# The other machine of the omarchy/dell-xps pair. Its tuios sessions show in
-# the sidebar under this name; `tuios attach --host {{ $peerName }}` opens one.
-# Rendered by chezmoi from peerName/peerAddr in chezmoi.toml.
-# tuios asks before it widens [hosts]: run `tuios config apply` outside tuios.
-[hosts.{{ $peerName }}]
-addr = {{ $peerAddr | quote }}
+{{- $peers := get . "peers" | default list -}}
+{{- range $peers }}
+# The other machine in the {{ .name }} pair. tuios sessions show in the
+# sidebar under this name; `tuios attach --host {{ .name }}` opens one.
+# Rendered by chezmoi from the peers list in chezmoi.toml.
+# tuios asks before it trusts a new host: run `tuios config apply` from
+# outside tuios after this file widens [hosts].
+[hosts.{{ .name }}]
+addr = {{ .addr | quote }}
 connect_timeout = 10
 ssh_options = ["-A"]
 {{ end -}}

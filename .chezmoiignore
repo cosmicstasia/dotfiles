@@ -1,4 +1,7 @@
+{{ $profile := get . "profile" | default "workstation" }}
+
 README.md
+install-server.sh
 **/.DS_Store
 **/.git
 **/.git/**
@@ -37,8 +40,16 @@ README.md
 # tuios backups and runtime state
 .config/tuios/*.bak*
 
-# Theming: on Omarchy every app follows the Omarchy theme; this check
-# guards templates in case Omarchy itself is ever absent.
+{{ if ne .chezmoi.os "darwin" }}
+Brewfile
+Library
+{{ end }}
+{{ if ne .chezmoi.os "linux" }}
+.config/xdg-terminals.list
+{{ end }}
+
+# Theming: on Omarchy every app follows the Omarchy theme; elsewhere (the Mac)
+# apps keep their own colours. See .chezmoitemplates/omarchy-theme.
 {{ if includeTemplate "omarchy-theme" . | trim }}
 .config/kitty/themes
 # omarchy-theme-set-pi writes this on every theme change.
@@ -55,4 +66,24 @@ README.md
 .config/nvim/plugin
 .omp/agent/themes
 .config/tuios/config.d/omarchy.toml
+{{ end }}
+
+# Server profile: headless hosts reached over SSH. No desktop session, no GUI
+# terminal or compositor, no desktop theming and no Emacs (native packages are
+# skipped there). The shell, tmux, editor, agent and tool configs still apply.
+{{ if eq $profile "server" }}
+.config/kitty
+.config/hypr
+.config/btop
+.config/omarchy
+.config/tuios
+.config/emacs
+.config/xdg-terminals.list
+{{ end }}
+
+# Bash only exists on the server profile, as a handoff to zsh when the remote
+# host's login shell is bash.
+{{ if ne $profile "server" }}
+.bash_profile
+.bashrc
 {{ end }}

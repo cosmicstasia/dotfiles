@@ -1,0 +1,15 @@
+# Managed by chezmoi for the server profile. Non-login interactive bash: hand
+# off to zsh, or at minimum expose the mise-managed tools.
+if [ -z "${DOTFILES_BASH_KEEP:-}" ] && command -v zsh >/dev/null 2>&1; then
+  case $- in
+    *i*) exec zsh ;;
+  esac
+fi
+
+for dir in "$HOME/.local/bin" "$HOME/.local/share/mise/shims"; do
+  case ":$PATH:" in
+    *":$dir:"*) ;;
+    *) PATH="$dir:$PATH" ;;
+  esac
+done
+export PATH

@@ -1,0 +1,11 @@
+# Managed by chezmoi for the server profile. Bash is often the login shell on
+# remote hosts; hand interactive sessions to zsh, which reads ~/.zshrc, so the
+# dotfiles behave as they do on the workstations.
+if [ -z "${DOTFILES_BASH_KEEP:-}" ] && command -v zsh >/dev/null 2>&1; then
+  case $- in
+    *i*) exec zsh -l ;;
+  esac
+fi
+
+# Without zsh, at least put the mise toolchain on PATH.
+[ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"

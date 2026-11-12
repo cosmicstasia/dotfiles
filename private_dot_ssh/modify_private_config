@@ -1,16 +1,18 @@
 {{- /* chezmoi:modify-template */ -}}
 {{- /*
-  Puts a managed block at the top of ~/.ssh/config. The other machine of the
-  pair (peerAddr) and the git hosts in .chezmoidata/git.toml use this
+  Puts a managed block at the top of ~/.ssh/config. Each other machine in the
+  peers list, and each git host in .chezmoidata/git.toml, use this
   machine's ~/.ssh/id_ed25519 straight from disk: no agent, no forwarding, no
   password manager. Other hosts, and the rest of the file, are left alone.
 */ -}}
 {{- $rest := regexReplaceAll "(?s)# BEGIN chezmoi[^\n]*\n.*?# END chezmoi[^\n]*\n*" .chezmoi.stdin "" -}}
-{{- $peerName := get . "peerName" | default "" -}}
-{{- $peerAddr := get . "peerAddr" | default "" -}}
+{{- $peers := get . "peers" | default list -}}
 # BEGIN chezmoi (managed: edit private_dot_ssh/modify_private_config)
-{{- if $peerAddr }}
+{{- range $peers }}
+{{- $peerName := .name }}
+{{- $peerAddr := .addr }}
 {{- $host := regexReplaceAll "^.*@" $peerAddr "" }}
+
 Host {{ if and $peerName (ne $peerName $host) }}{{ $peerName }} {{ end }}{{ $host }}
   HostName {{ $host }}
 {{- if contains "@" $peerAddr }}
@@ -32,8 +34,8 @@ Host {{ $git.host }}
   IdentityFile ~/.ssh/id_ed25519
 {{- end }}
 # END chezmoi
-{{- $rest = trim $rest }}
+{{- $rest := trim $rest }}
 {{- if $rest }}
 
 {{ $rest }}
-{{ end -}}
+{{- end }}
