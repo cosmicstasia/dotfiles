@@ -10,6 +10,8 @@ other machines, while `dell-xps` and `macbook` each pair only with `omarchy`.
 - **zsh** is the login shell on every machine (`~/.zshenv`, `~/.zprofile` on
   the Mac, `~/.zshrc`). kitty, tmux, herdr, Neovim terminals and tuios panes
   all start it.
+- **rex** key bindings are `~/.config/rex/init.lua`, shared as-is. Prefix is
+  `ctrl+a`, the same map as tmux.
 - **tuios** is the terminal workspace, opt-in: terminals open a plain zsh. Set
   `TUIOS_AUTOSTART=1` and a top-level zsh runs `tuios attach`, which restores
   or creates a session (skipped inside tuios/tmux/herdr/zellij, editors and
@@ -134,7 +136,7 @@ cache and installer metadata are not tracked. Omarchy's `omarchy` and
 ## Servers
 
 A remote host reached over SSH uses the `server` profile: the same shell,
-tmux, editor, git and agent configuration and the same mise toolchain, but no
+tmux, rex, editor, git and agent configuration and the same mise toolchain, but no
 desktop theming, no native package install (servers usually give no sudo) and
 no peer machines. The profile is stored as `data.profile` in the chezmoi
 config; every other value defaults to `workstation`, so the Mac and the
