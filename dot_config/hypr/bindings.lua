@@ -63,12 +63,13 @@ if o.cmd_present(paths.home .. "/.local/bin/omarchy-launch-podman-tui") then
   o.bind("SUPER + SHIFT + D", "Podman", paths.home .. "/.local/bin/omarchy-launch-podman-tui")
 end
 
--- Use TUIOS as the multiplexer in the default terminal, on a machine with
--- it on PATH. Replace Omarchy's Tmux shortcut; keep SUPER+SHIFT+RETURN for
--- Browser.
-if o.cmd_present("tuios") then
+-- SUPER+ALT+RETURN opens the default terminal attached to the Work tmux
+-- session (creating it if needed). Same action as Omarchy's stock Tmux
+-- binding, bound explicitly so it does not depend on the preinstalled
+-- bindings being enabled. Keep SUPER+SHIFT+RETURN for Browser.
+if o.cmd_present("tmux") then
   hl.unbind("SUPER + ALT + RETURN")
-  o.bind("SUPER + ALT + RETURN", "Terminal with TUIOS", "omarchy-launch-terminal tuios")
+  o.bind("SUPER + ALT + RETURN", "Terminal with tmux", "omarchy-launch-terminal-tmux")
 end
 
 -- strata-installer: file-manager start

@@ -47,6 +47,13 @@ finds the active Omarchy theme directory
   `run_onchange_after_20-native-packages.sh.tmpl`.
 - zsh-autosuggestions and fast-syntax-highlighting are git checkouts in
   `~/.local/share/zsh/plugins` (see `.chezmoiexternal.toml`).
+- **pi** packages are the `packages` list in `~/.pi/agent/settings.json`; pi
+  installs them from npm at startup, so there is no install script here.
+  `pi-omniroute-sync` adds the OmniRoute provider and `/omni` commands. Its
+  own state (`~/.pi/agent/extensions/pi-omniroute-sync/settings.json`) holds
+  the API key and a sync timestamp that changes every few minutes, so each
+  machine runs `/omni setup` once instead of tracking that file. Only
+  settings.json is tracked.
 
 ## Working across machines
 
