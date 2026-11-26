@@ -1,22 +1,22 @@
 # Dotfiles
 
 Configuration for three machines — the Omarchy desktop (`omarchy`, Arch
-Linux), a Dell XPS 15 also on Omarchy (`dell-xps`), and this MacBook
+Linux), a Dell XPS 15 also on Omarchy (`dell-xps`), and a MacBook
 (`macbook`) — managed by chezmoi. `omarchy` is the hub: it pairs with both
 other machines, while `dell-xps` and `macbook` each pair only with `omarchy`.
 
 ## Defaults
 
-- **zsh** is the login shell on every machine (`~/.zshenv`, `~/.zprofile` on
-  the Mac, `~/.zshrc`). kitty, tmux, herdr, Neovim terminals and tuios panes
-  all start it.
+- **zsh** is the login shell on every machine (`~/.zshenv`, `~/.zshrc`, and
+  `~/.zprofile` to re-fix `PATH` after macOS `path_helper`). kitty, tmux,
+  herdr, Neovim terminals and tuios panes all start it.
 - **rex** key bindings are `~/.config/rex/init.lua`, shared as-is. Prefix is
   `ctrl+a`, the same map as tmux.
 - **tuios** is the terminal workspace, opt-in: terminals open a plain zsh. Set
   `TUIOS_AUTOSTART=1` and a top-level zsh runs `tuios attach`, which restores
   or creates a session (skipped inside tuios/tmux/herdr/zellij, editors and
-  SSH logins). On Omarchy, `Super+Alt+Return` opens a terminal straight into
-  tuios.
+  SSH logins). On Omarchy, `Super+Alt+Return` opens the default terminal
+  attached to the `Work` tmux session, creating it if needed.
 - On Omarchy, `~/.config/xdg-terminals.list` makes kitty the default terminal.
 
 ## Theming
@@ -40,8 +40,9 @@ finds the active Omarchy theme directory
 ## Packages
 
 - **mise** (`~/.config/mise/config.toml`) installs the shared CLI toolchain and
-  language runtimes on every machine, at the same versions. `chezmoi apply`
-  runs `mise install` whenever that file changes.
+  language runtimes on every machine, at the same versions (Ruby builds use
+  prebuilt binaries: `[settings.ruby] compile = false`). `chezmoi apply` runs
+  `mise install` whenever that file changes.
 - **Homebrew** (macOS only) and **pacman** (Omarchy) install the native set
   mise cannot provide — GUI apps and system libraries/daemons; see
   `run_onchange_after_20-native-packages.sh.tmpl`.
@@ -52,8 +53,10 @@ finds the active Omarchy theme directory
   `pi-omniroute-sync` adds the OmniRoute provider and `/omni` commands. Its
   own state (`~/.pi/agent/extensions/pi-omniroute-sync/settings.json`) holds
   the API key and a sync timestamp that changes every few minutes, so each
-  machine runs `/omni setup` once instead of tracking that file. Only
-  settings.json is tracked.
+  machine runs `/omni setup` once instead of tracking that file. The
+  hand-written extensions in `~/.pi/agent/extensions` are tracked too — the
+  pretty footer, the startup header, `/handoff`, plan mode and the workmux
+  status reporter — while generated ones such as `atuin.ts` are not.
 
 ## Working across machines
 
@@ -66,8 +69,8 @@ connected on both ends of a pairing; ordinary OpenSSH provides
 authentication:
 
 - `omarchy` (desktop) → `dell-xps.netbird.selfhosted`, `macbook-pro-16.netbird.selfhosted`
-- `dell-xps` (this Dell) → `omarchy.netbird.selfhosted`
-- `macbook` (this MacBook) → `omarchy.netbird.selfhosted`
+- `dell-xps` → `omarchy.netbird.selfhosted`
+- `macbook` → `omarchy.netbird.selfhosted`
 
 For each peer:
 
@@ -109,8 +112,8 @@ those hosts and leaves the rest of the file alone.
 `.chezmoidata/git.toml` lists the git hosts (`gitHosts`) and the public keys
 trusted to sign (`git.signerKeys`), which `~/.config/git/allowed_signers` is
 built from so `git verify-commit` works for commits from any machine. The
-first MacBook's key (sold, replaced by this one) stays listed so its old
-signed commits still verify.
+first MacBook's key (sold, replaced by the current MacBook) stays listed so
+its old signed commits still verify.
 
 On a new machine:
 
@@ -125,9 +128,11 @@ On a new machine:
 omp itself comes from mise (`oh-my-pi`, the standalone release binary), like
 every other CLI tool; it is not installed with `bun install -g`.
 
-`~/.omp/agent/config.yml` (theme, symbols, model roles) is shared as-is.
-`~/.omp/agent/models.yml` is a template: the 9router provider is written only
-when the `nineRouterApiKey` chezmoi value is set, and the key never enters this
+`~/.omp/agent/config.yml` (symbols, model roles) and `~/.omp/agent/models.yml`
+are templates. The theme is `omarchy` where Omarchy renders
+`themes/omarchy.json`, Catppuccin elsewhere; the default model role points at
+9router only when the `nineRouterApiKey` chezmoi value is set, which also
+writes that provider into `models.yml`. The key itself never enters this
 public repository. tuios writes its own omp extension
 (`tuios integration install omp`), so a script re-runs that instead of
 tracking the file. Sessions, history and model caches stay per machine.
@@ -202,7 +207,8 @@ chezmoi apply
 
 The scripts run in order: install mise, install native packages (Homebrew or
 pacman), `mise install`, generate the Nushell integrations, install the tuios
-omp integration, and set zsh as the login shell. The first initialization
-prompts for machine-specific paths, the peer list and the 9router key; re-run
-`chezmoi init` to change them later. On a server, prefix the init with
-`DOTFILES_PROFILE=server` (see Servers above).
+omp integration, refresh the Omarchy theme templates, install the herdr
+plugins listed in `.chezmoidata/herdr.toml`, and set zsh as the login shell.
+The first initialization prompts for machine-specific paths, the peer list and
+the 9router key; re-run `chezmoi init` to change them later. On a server,
+prefix the init with `DOTFILES_PROFILE=server` (see Servers above).
