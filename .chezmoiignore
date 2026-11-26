@@ -20,6 +20,10 @@ install-server.sh
 # sensible default), so they are never synced.
 .config/hypr/monitors.lua
 .config/hypr/input.lua
+# hyprmoncfg writes this on every layout it applies.
+.config/hypr/hyprmoncfg-monitors.lua
+# Editor backups of the Hyprland config.
+.config/hypr/*.bak*
 .config/emacs/tree-sitter
 .config/emacs/custom.el~
 .config/emacs/matugen-colors.el

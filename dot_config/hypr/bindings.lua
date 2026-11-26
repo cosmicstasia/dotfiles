@@ -55,6 +55,12 @@ if o.cmd_present(paths.config_home .. "/omarchy/plugins/anastasia.thundercloud")
   o.bind("SUPER + ALT + M", "Thundercloud", "omarchy-shell shell toggle anastasia.thundercloud")
 end
 
+-- Diary: open today's entry, autosaved by Omawrite in ~/Documents/Diary
+-- (~/.config/omarchy/plugins/io.github.cosmicstasia.diary, quickshell plugin).
+if o.cmd_present(paths.config_home .. "/omarchy/plugins/io.github.cosmicstasia.diary") then
+  o.bind("SUPER + ALT + D", "Diary", "omarchy-shell io.github.cosmicstasia.diary write")
+end
+
 -- Use Podman instead of Omarchy's default Docker TUI binding, on a machine
 -- with the wrapper script installed (~/.local/bin/omarchy-launch-podman-tui,
 -- per-machine, not chezmoi-managed).
@@ -79,3 +85,5 @@ o.bind("SUPER + SHIFT + F", "File manager", { launch = paths.home .. "/.local/bi
 o.bind("SUPER + ALT + SHIFT + F", "File manager (cwd)",
   "uwsm-app -- " .. paths.home .. "/.local/bin/strata \"$(omarchy-cmd-terminal-cwd)\"")
 -- strata-installer: file-manager end
+
+o.bind("SUPER + ALT + N", "Type name", paths.home .. "/.local/bin/omarchy-type-name", { repeating = false })

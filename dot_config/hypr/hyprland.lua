@@ -34,8 +34,11 @@ hl.env("HYPRCURSOR_SIZE", "24")
 -- Add any other personal Hyprland configuration below.
 -- o.window("qemu", { workspace = "5" })
 
--- oma-cast launcher bindings, only on a machine with it installed
--- (~/.local/bin/oma-cast, installed by hand per machine, not by chezmoi).
-if o.cmd_present("oma-cast") then
-  require("hypr.oma-cast")
+-- omacast launcher bindings, only on a machine with it installed
+-- (~/.local/bin/omacast -> ~/.config/omarchy/plugins/typecraft.omacast, per machine).
+if o.cmd_present("omacast") then
+  require("hypr.omacast")
 end
+
+-- Added by hyprmoncfg: its generated monitor rules load last, so nothing before this can override the applied layout.
+do local path = (os.getenv("XDG_CONFIG_HOME") or os.getenv("HOME") .. "/.config") .. "/hypr/hyprmoncfg-monitors.lua"; local file = io.open(path, "r"); if file then file:close(); dofile(path) end end
