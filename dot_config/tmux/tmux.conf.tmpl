@@ -132,6 +132,12 @@ bind '"' split-window -v -c "#{pane_current_path}"
 bind % split-window -h -c "#{pane_current_path}"
 bind x kill-window
 bind q kill-pane
+
+# workmux: agent/worktree orchestration
+bind-key a display-popup -h 60% -w 90% -E "workmux dashboard"
+bind-key C-t run-shell "workmux sidebar"
+bind-key Tab run-shell "workmux last-agent"
+bind-key D run-shell "workmux last-done"
 # TPM
 run '~/.tmux/plugins/tpm/tpm'
 
