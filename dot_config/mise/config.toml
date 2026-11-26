@@ -5,6 +5,10 @@
 
 [settings]
 experimental = true
+idiomatic_version_file_enable_tools = ["ruby"]
+
+[settings.ruby]
+compile = false
 
 [tools]
 # Languages and runtimes
@@ -99,3 +103,4 @@ ty = "latest"
 "pipx:platformio" = "latest"
 "pipx:hyfetch" = "latest"
 pi = "latest"
+ruby = "latest"

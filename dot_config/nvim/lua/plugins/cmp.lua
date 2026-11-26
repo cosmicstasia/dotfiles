@@ -1,6 +1,8 @@
 return {
   {
     "saghen/blink.cmp",
+    -- Pin to a released tag so blink.cmp can download its prebuilt Rust fuzzy binary
+    version = "1.*",
     opts = {
       completion = {
         menu = {
